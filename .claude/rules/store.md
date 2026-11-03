@@ -17,6 +17,7 @@ Store review is a gate we do not control; these rules keep a submission from bei
 - Export compliance answered (standard encryption only → `ITSAppUsesNonExemptEncryption = NO`).
 - Background modes, push, HealthKit, location "always" only with a matching feature and explanation in the review notes.
 - Build number (`CFBundleVersion`) increases with every upload; marketing version (`CFBundleShortVersionString`) per release.
+- iPhone Duo: built with the iOS 27.1 SDK, pose matrix passed (`docs/iphone-duo.md`), Duo screenshots uploaded for the "Made for iPhone Duo" badge; the reported April 2027 screenshot and SDK requirement is checked in App Store Connect before each release.
 
 ## Android
 - Data Safety form answers derived from the code and third-party SDKs; updated whenever `/platform` adds a data flow.

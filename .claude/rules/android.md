@@ -21,6 +21,8 @@ Android native is in the kit as a platform pack; whether a project uses it comes
 - Coroutines + `Flow`/`StateFlow`, structured, lifecycle-aware collection (`collectAsStateWithLifecycle`). No raw `Thread`, `Executor`, `AsyncTask` (`kotlin-concurrency-and-flow`).
 - State is immutable data classes; sealed classes for results and UI events, exhaustive `when` (`kotlin-control-flow`).
 - Compose: state hoisted, side effects only in effect handlers, stable parameters, deferred reads for frame-rate state (`compose-state-and-effects`, `compose-performance`).
+- Foldables and large screens: window size classes (`WindowSizeClass`) decide layout, never the device model; hinge and posture from Jetpack WindowManager (`WindowInfoTracker`) only where the spec asks; `/qa` tests fold and unfold mid-task on a foldable emulator.
+- Foldables and large screens: window size classes (`WindowSizeClass`) decide layout, never the device model; hinge and posture from Jetpack WindowManager (`WindowInfoTracker`) only where the spec asks; `/qa` tests fold and unfold mid-task on a foldable emulator.
 
 ## Performance
 - Release build with R8 for every measurement. App-specific Baseline Profile generated and regenerated whenever the startup or main-scroll path changes; Macrobenchmark in CI (`android-benchmark-comparison`).

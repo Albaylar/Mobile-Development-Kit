@@ -33,7 +33,7 @@ Format: Given [state], when [action], then [result]. Fixed IDs, never renumbered
 - None
 
 ## Platforms and devices
-- iOS: … · Android: … · Smallest screen: … · Large font and dark mode: supported
+- iOS: … (iPhone Duo inner display: supported / out of scope) · Android: … · Smallest screen: … · Large font and dark mode: supported
 
 ## Design reference
 <!-- Figma frames, design-system components, screenshots in docs/design/. "None" if none. -->

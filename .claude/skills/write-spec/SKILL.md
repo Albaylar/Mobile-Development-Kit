@@ -24,7 +24,7 @@ One question at a time, always with a recommendation. Cover:
 - Who uses it (user types from the PRD), the core action, what success looks like.
 - Must-have behavior, validation rules, limits.
 - Empty state, loading state, error state: what the user sees in each.
-- Mobile edge cases, always concrete: no network, request interrupted by app kill or incoming call, permission denied (camera, location, notifications), low storage, background → foreground after hours, small screen (iPhone SE / 5" Android), large font (Dynamic Type XXXL), dark mode, device rotation, two taps in quick succession, the same account on two devices.
+- Mobile edge cases, always concrete: no network, request interrupted by app kill or incoming call, permission denied (camera, location, notifications), low storage, background → foreground after hours, small screen (iPhone SE / 5" Android), large font (Dynamic Type XXXL), dark mode, device rotation, two taps in quick succession, the same account on two devices; on iOS also the iPhone Duo: folding or unfolding mid-task (text entry, scroll position, sheet, video), the tent pose, Split View beside another app.
 - Personal data: which fields, why, how long, on device or server.
 - Platform differences, if the project has more than one (same behavior unless named). Edge cases that do not apply (rotation for a notification, two devices without accounts) are listed under "Out of scope" with the reason, not dropped silently.
 - Dependencies on other features. Effort estimate (ask, offer a recommendation).

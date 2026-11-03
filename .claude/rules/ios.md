@@ -9,7 +9,7 @@ paths:
   - "**/*.xcprivacy"
 ---
 
-# iOS Rules (SwiftUI, Swift 6.2+, Xcode 26)
+# iOS Rules (SwiftUI, Swift 6.2+, Xcode 27.1)
 
 The vendored iOS skills (platform "ios" in `.claude/skills/SOURCES.md`) own the detail. This file says which one applies and what is non-negotiable.
 
@@ -34,6 +34,15 @@ The vendored iOS skills (platform "ios" in `.claude/skills/SOURCES.md`) own the 
 - Build check: `xcodebuild -scheme <App> -destination 'platform=iOS Simulator,name=<newest iPhone of the installed Xcode>' -quiet build test` with `SWIFT_TREAT_WARNINGS_AS_ERRORS=YES` on the app target.
 - `swiftui-pro` review before `/qa`: deprecated API, data flow, navigation, Dynamic Type, Reduce Motion, localization. `swiftui-performance-audit` when a screen has a list, animation or `body` that recomputes.
 - `ios-accessibility`: VoiceOver labels, Dynamic Type to XXXL, contrast. `ios-simulator` drives the simulator in `/qa` and `/perf`.
+
+## iPhone Duo (foldable) and resizable layout
+Details and sources: `docs/iphone-duo.md`. Every iOS project in the kit is built as a freely resizable app; the Duo is the device that proves it.
+- Build with the **iOS 27.1 SDK or later**. No `UIRequiresFullScreen`.
+- Size from the view or window, never the screen: `GeometryReader` / `onGeometryChange`, `view.bounds`; **no `UIScreen.main`** (`/qa` greps for it). React to every size change, not once at launch.
+- Layout decisions come from **size classes**, never from `userInterfaceIdiom`, orientation APIs or hard-coded heights. On the Duo's inner display `horizontalSizeClass == .regular` is an iPhone.
+- Standard containers (`NavigationStack`, `NavigationSplitView`, `TabView`, `ArrangementView`) first; custom chrome queries reserved regions (`reservedRegions(kind: .division / .occlusion)`) so nothing sits on the fold or under the camera. Safe-area insets may differ per side.
+- `/design` delivers compact and regular size-class frames; `/qa` runs the Device Hub pose matrix (closed, open, fold mid-task, book, tent, rotation, Split View).
+- Store: iPhone Duo screenshots in App Store Connect earn the "Made for iPhone Duo" badge; an April 2027 screenshot/SDK requirement is reported by secondary sources, verify before release.
 
 ## Store
 - `appstore-review` runs in `/release` before every submission: PrivacyInfo.xcprivacy, required-reason APIs, ATT, account deletion, Sign in with Apple, paywall wording. `asc-*` skills handle TestFlight and submission through the App Store Connect CLI; signing is `[HUMAN]`.

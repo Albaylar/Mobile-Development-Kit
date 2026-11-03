@@ -12,7 +12,8 @@
 ## Platforms
 | Platform | In scope | Minimum OS | Toolchain |
 |---|---|---|---|
-| iOS (SwiftUI) | yes / no | iOS 17 | Xcode 26, Swift 6.2 |
+| iOS (SwiftUI) | yes / no | iOS 17 | Xcode 27.1, iOS 27.1 SDK, Swift 6.2 |
+| iPhone Duo inner display | supported / out of scope | | `docs/iphone-duo.md` |
 | Android (Compose) | yes / no | API 26 | AGP x, Kotlin x |
 | Flutter | yes / no | from the PRD (default iOS 17 / API 26) | Flutter 3.4x, Dart 3.1x |
 | Shared core (KMP) | yes / no | | |

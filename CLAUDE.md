@@ -22,14 +22,14 @@ Builders (`/backend /core /ui /platform`) run as forked sub-agents (`.claude/age
 .claude/skills/     kit skills (init foundation monetization write-spec refine signoff design architecture tasks backend core ui platform perf qa release help audit)
                     BUILDER.md (shared builder procedure) · 35 vendored third-party skills as flat folders next to them (Claude Code only discovers `.claude/skills/<name>/SKILL.md`), provenance and platform in SOURCES.md
 .claude/agents/     backend-dev core-dev ui-dev platform-dev qa-engineer perf-auditor
-docs/               USAGE.md (start here) · PRD.md · design/ (design-system.md, exports) · architecture-profile.md (per project) · adr/ · system.md · privacy.md · architecture-catalog.md · backend-selection.md · monetization.md · design-first.md · foundation-mcp.md · architecture-research.md · skills-catalog.md
+docs/               USAGE.md (start here) · PRD.md · design/ (design-system.md, exports) · architecture-profile.md (per project) · adr/ · system.md · privacy.md · architecture-catalog.md · backend-selection.md · monetization.md · design-first.md · iphone-duo.md · foundation-mcp.md · architecture-research.md · skills-catalog.md
 features/           INDEX.md · PROJ-X-name/{spec,architecture,tasks,perf-report,qa-report}.md
 scripts/            vendor-skills.sh
 ```
 
 ## Per-machine setup
 - Flutter: `claude plugin marketplace add flutter/agent-plugins` then `claude plugin install dart-flutter@dart-flutter` (Dart/Flutter MCP + task skills; not vendored).
-- iOS: Xcode 26, `xcrun simctl`; App Store Connect CLI (`asc`) for `/release`. Android: Android Studio, JDK 17, an emulator.
+- iOS: Xcode 27.1 (iOS 27.1 SDK, Device Hub with the iPhone Duo simulator), `xcrun simctl`; App Store Connect CLI (`asc`) for `/release`. Android: Android Studio, JDK 17, an emulator.
 - Subscriptions (optional): RevenueCat AI Toolkit plugin (`claude plugins marketplace add RevenueCat/ai-toolkit`, `claude plugins install revenuecat`): hosted MCP + skills.
 - Foundation MCP: Go 1.25+ (`brew install go`); `/foundation setup` clones `github.com/Albaylar/foundation-mcp` to `~/Developer/foundation-mcp`, builds it, loads the design tokens and writes `.mcp.json`.
 - Disable globally installed generic skills that overlap the vendored packs (`swift-expert`, `flutter-expert`).

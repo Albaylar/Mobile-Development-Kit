@@ -68,7 +68,7 @@ Done once per machine.
 | What | Why | How |
 |---|---|---|
 | Claude Code | the kit runs in it | desktop app or CLI |
-| Xcode 26 + simulator | iOS build, tests, `/qa` | App Store; `xcrun simctl list` must work |
+| Xcode 27.1 + simulator | iOS build, tests, `/qa`, iPhone Duo poses in Device Hub | App Store; `xcrun simctl list` must work |
 | Flutter SDK + official Flutter plugin | Flutter projects; Dart/Flutter MCP and task skills | two commands below |
 | Android Studio, JDK 17, an emulator | Android and Flutter-on-Android | Android Studio setup |
 | Go 1.25+ | building the Foundation MCP | `brew install go` |
@@ -229,6 +229,7 @@ If the app sells anything, `/init` records it (input 10) and `/monetization` pla
 - **Severity.** Critical (security, data loss, crash on the main flow, certain store rejection), High (AC fails, budget unproven, purchase case missing), Medium (workaround exists), Low (cosmetic).
 - **Performance budgets** (in the profile): cold start ≤ 400 ms, dropped frames while scrolling ≤ 1 %, memory and size from the PRD. Measured only on release/profile builds on the lowest device.
 - **Accessibility is part of done:** Dynamic Type XXXL, VoiceOver/TalkBack, contrast 4.5:1, reduce motion.
+- **Resizable by construction:** every iOS app is built for the iPhone Duo (size classes, no `UIScreen.main`, reserved regions for the fold); QA runs the fold, book, tent and Split View poses in Xcode's Device Hub (`docs/iphone-duo.md`).
 
 ## 11. Rules
 
@@ -289,6 +290,7 @@ docs/
   backend-selection.md        SQL / NoSQL / sync decision
   monetization.md             subscriptions: platform choice, state model, backend sync, tests
   design-first.md             reasons and rules of the design step
+  iphone-duo.md               building and shipping for Apple's foldable
   foundation-mcp.md           Foundation MCP contract
   skills-catalog.md           skill research
 features/

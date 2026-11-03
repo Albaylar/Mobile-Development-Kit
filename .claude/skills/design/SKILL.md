@@ -20,7 +20,7 @@ Screens are decided here, not while coding. Read `docs/design-first.md` first.
 2. **Frames.** Figma: the designer builds them; you read each with `get_design_context` + `get_screenshot`, check names and states, and raise gaps. Claude Design: create the Design artifact from the project's Design System artifact and build the artboards; export images to `docs/design/PROJ-X/`.
 3. **Component inventory.** For every component on the frames: existing (name from the design system / Foundation MCP) or new. New components go into the design system and the Foundation MCP (`register_component`) **before** the frame is approved. No one-off components; if the designer insists, it is a decision for the user.
 4. **Token check** with `get_variable_defs` (Figma) or the artifact's tokens: every color, type style, spacing resolves to a token. Hard-coded values are listed as findings.
-5. **Accessibility and device variants:** smallest supported device and XXXL font for the main screen, dark mode, labels for icon-only controls.
+5. **Accessibility and device variants:** smallest supported device and XXXL font for the main screen, dark mode, labels for icon-only controls. iOS: main screens in both size-class pairs, compact (outer display) and regular/regular (iPhone Duo inner display), plus one half-folded state for two-pane or media screens; nothing interactive on the fold line (`docs/iphone-duo.md`).
 6. Write `features/PROJ-X-name/design.md`: frame links or image paths, states covered, component inventory (existing / new), tokens used, interactions, platform differences, open findings.
 
 ## Approval

@@ -52,7 +52,7 @@ Do this once per computer. It takes about an hour, mostly downloads.
 | Step | Command or action | Check |
 |---|---|---|
 | Claude Code | install the desktop app or CLI | `claude --version` |
-| Xcode 26 | App Store, then open once to install components | `xcrun simctl list devices` lists iPhones |
+| Xcode 27.1 or newer | App Store, then open once to install components; includes Device Hub with the iPhone Duo simulator | `xcrun simctl list devices` lists iPhones |
 | Android Studio + JDK 17 | install, create one emulator (Pixel, API 35+) | the emulator boots |
 | Flutter SDK | flutter.dev install guide | `flutter doctor` has no red items |
 | Go 1.25+ | `brew install go` | `go version` |

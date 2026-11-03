@@ -26,6 +26,7 @@ The vendored Flutter skills (platform "flutter" in `.claude/skills/SOURCES.md`) 
 - `const` constructors wherever possible (lint `prefer_const_constructors` is an error, not a hint). No work in `build()`. `ListView.builder` / slivers for any list that can exceed one screen. `RepaintBoundary` around animated or frequently repainted subtrees; `cacheWidth`/`cacheHeight` on network images (`flutter-performance`).
 - CPU-heavy work (JSON > ~100 KB, image processing, crypto) runs in an isolate (`compute` / `Isolate.run`), never on the UI isolate.
 - Impeller is the renderer on both platforms; shader warm-up checked in `/perf`. Performance is measured only in `--profile` builds.
+- Foldables (iPhone Duo, Android): treat the app as a resizable window (`LayoutBuilder`, breakpoints by width, no device checks). `MediaQuery.displayFeatures` is populated only on Android; fold-aware layout on the iPhone Duo needs a plugin named in an ADR (`docs/iphone-duo.md`).
 
 ## Verification
 - `flutter analyze` with `very_good_analysis` (or `flutter_lints` + the kit's extra rules) and `dart format --set-exit-if-changed` pass before a task is done.
