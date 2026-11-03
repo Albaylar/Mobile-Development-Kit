@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "foundation": {
+      "command": "/Users/YOU/Developer/foundation-mcp/foundation",
+      "args": [
+        "--catalog", "/Users/YOU/Developer/foundation-mcp/catalog",
+        "--tokens", "/ABSOLUTE/PATH/TO/THIS/PROJECT/docs/design/tokens.json"
+      ]
+    },
+    "figma": {
+      "url": "http://127.0.0.1:3845/mcp"
+    }
+  }
+}

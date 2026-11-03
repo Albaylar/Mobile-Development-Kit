@@ -1,0 +1,9 @@
+.DS_Store
+.claude/settings.local.json
+*.p12
+*.p8
+*.mobileprovision
+*.jks
+*.keystore
+key.properties
+.env*
