@@ -39,10 +39,10 @@ claude plugin install dart-flutter@dart-flutter
 ### Android
 | Skill | Source | Why | Used by |
 |---|---|---|---|
-| `using-chrisbanes-skills` + `compose-state-and-effects`, `compose-performance`, `compose-component-design`, `compose-ui-testing-patterns`, `kotlin-concurrency-and-flow`, `kotlin-control-flow`, `kotlin-api-design`, `gradle-run`, `android-benchmark-comparison` | Chris Banes (ex-Google Android/Compose), Nov 2026, Apache-2.0 | Evidence-first procedures (measure one transition, change one axis); routing skill decides which to load; 395 reference files | `/ui`, `/core`, `/perf`, `/qa` |
+| `using-chrisbanes-skills` + `compose-state-and-effects`, `compose-performance`, `compose-component-design`, `compose-ui-testing-patterns`, `compose-animations`, `compose-focus-navigation`, `kotlin-concurrency-and-flow`, `kotlin-control-flow`, `kotlin-api-design`, `gradle-run`, `android-benchmark-comparison` | Chris Banes (ex-Google Android/Compose), Nov 2026, Apache-2.0 | Evidence-first procedures (measure one transition, change one axis); routing skill decides which to load; 395 reference files | `/ui`, `/core`, `/perf`, `/qa` |
 | `android-development` | dpconde, Dec 2025 | NowInAndroid module structure (`api`/`impl`), Hilt, Room, Gradle convention plugins, templates. Older, kept for the structure only; Compose detail comes from chrisbanes | `/architecture` |
 
-Left out of the chrisbanes pack on purpose: `shepherd`, `to-plan`, `implement-with-subagents`, `subagent-delegation`, `deliver-spec`, `run-github-project`, `release-kotlin-library`, `changelog`, `grounded-writing`. They are workflow skills that compete with the kit's own `/tasks`, `/qa`, `/release`.
+Left out of the chrisbanes pack on purpose: `shepherd`, `to-plan`, `implement-with-subagents`, `subagent-delegation`, `deliver-spec`, `run-github-project`, `release-kotlin-library`, `changelog`, `grounded-writing`. They are workflow skills that compete with the kit's own `/tasks`, `/qa`, `/release`; their rows are removed from the router skill (noted in `SOURCES.md`).
 
 ## Evaluated and not taken
 | Candidate | Reason |

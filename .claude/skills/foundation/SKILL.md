@@ -47,7 +47,14 @@ Create or update `.mcp.json` in the project root from `.mcp.json.example`, with 
 Keep any other servers already in `.mcp.json` (e.g. `figma`). Tell the user: "MCP servers load when a session starts: restart Claude Code in this folder (or reconnect in /mcp) and approve the `foundation` server once."
 
 ### 6. Token source for the app
-If the app project exists (the app shell feature is In Progress or later): generate the token file per platform from the merged tokens and write it where the profile's module layout says (default iOS `Core/Design/FoundationTokens.swift`, Flutter `lib/core/design/foundation_tokens.dart`). Before the restart the `get_tokens` tool is not available yet: build the file with `<path>/foundation` after the restart, or note it as the first [UI] task of the app shell. Never hand-edit a generated token file.
+If the app project exists (the app shell feature is In Progress or later), generate the token file from the merged tokens, per platform in the profile:
+```bash
+<path>/foundation --catalog <path>/catalog --tokens docs/design/tokens.json --export swiftui > <app>/Core/Design/FoundationTokens.swift
+```
+```bash
+<path>/foundation --catalog <path>/catalog --tokens docs/design/tokens.json --export flutter > lib/foundation/tokens/foundation_tokens.dart
+```
+Paths: on Flutter the catalog's components import `../tokens/foundation_tokens.dart`, so tokens go in `lib/foundation/tokens/` and pasted components in `lib/foundation/components/`. On iOS the module layout from the profile decides; do not name a module or folder `Foundation` (it collides with Apple's framework). No app project yet → note it as the first [UI] task of the app shell. Never hand-edit a generated token file; regenerate it.
 
 ### 7. Record
 - `docs/system.md` section "Design system": server version (`--version`), catalog commit (`git -C <path> log -1 --format=%h`), tokens file, date.
@@ -55,7 +62,7 @@ If the app project exists (the app shell feature is In Progress or later): gener
 - Commit in the app project: `chore: connect Foundation MCP (v<version>, catalog <hash>)`.
 
 ## `sync`
-Clean working tree in `<path>` → `pull --ff-only`, rebuild, `go test ./...`, `--check` with the project tokens. Compare the catalog commit with the one in `docs/system.md`: list new or changed components (`git -C <path> log --oneline <old>..HEAD -- catalog/components`). Re-export the token files if `tokens.json` or the base changed. Update `docs/system.md`. Commit `chore: sync Foundation MCP to catalog <hash>`.
+Clean working tree in `<path>` → `pull --ff-only`, rebuild, `go test ./...`, `--check` with the project tokens. Compare the catalog commit with the one in `docs/system.md`: list new or changed components (`git -C <path> log --oneline <old>..HEAD -- catalog/components`). Re-export the token files with `--export` if `tokens.json` or the base changed. Update `docs/system.md`. Commit `chore: sync Foundation MCP to catalog <hash>`.
 
 ## `status`
 Report, one line each: Go present · server path and version · catalog commit vs `docs/system.md` · behind `origin/main`? (`git -C <path> fetch -q && git -C <path> rev-list --count HEAD..origin/main`) · `docs/design/tokens.json` present and `--check` result · `.mcp.json` has `foundation` · the `foundation` tools visible in this session (if not: restart needed).

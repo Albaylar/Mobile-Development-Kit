@@ -6,7 +6,7 @@
 set -euo pipefail
 K="$(cd "$(dirname "$0")/.." && pwd)"
 S="$(mktemp -d)"
-EX=(--exclude=.git --exclude=.github --exclude=README.md --exclude=CHANGELOG.md --exclude=CONTRIBUTING.md --exclude=CODE_OF_CONDUCT.md --exclude=.gitignore --exclude=install.sh --exclude=.DS_Store --exclude=AGENTS.md --exclude=CLAUDE.md --exclude=tests --exclude=tooling)
+EX=(--exclude=/skills --exclude=/.claude-plugin --exclude=.git --exclude=.github --exclude=README.md --exclude=CHANGELOG.md --exclude=CONTRIBUTING.md --exclude=CODE_OF_CONDUCT.md --exclude=.gitignore --exclude=install.sh --exclude=.DS_Store --exclude=AGENTS.md --exclude=CLAUDE.md --exclude=tests --exclude=tooling)
 TMP="$K/.claude/skills/SOURCES.tmp"; : > "$TMP"
 
 clone(){ [ -d "$S/$1" ] || git clone --quiet --depth 1 "https://github.com/${1/_//}.git" "$S/$1"; }
@@ -39,12 +39,17 @@ for s in flutter-skills-index flutter-architecture flutter-dart-style flutter-st
 vendor Ethiel97_flutter-clean-riverpod-skills skills/flutter-result-errors flutter flutter-result-errors
 vendor Ethiel97_flutter-clean-riverpod-skills skills/flutter-riverpod3 flutter flutter-riverpod3
 # Android
-for s in using-chrisbanes-skills compose-state-and-effects compose-performance compose-component-design compose-ui-testing-patterns kotlin-concurrency-and-flow kotlin-control-flow kotlin-api-design gradle-run android-benchmark-comparison; do vendor chrisbanes_skills "skills/$s" android "$s"; done
+for s in using-chrisbanes-skills compose-state-and-effects compose-performance compose-component-design compose-ui-testing-patterns compose-animations compose-focus-navigation kotlin-concurrency-and-flow kotlin-control-flow kotlin-api-design gradle-run android-benchmark-comparison; do vendor chrisbanes_skills "skills/$s" android "$s"; done
 vendor dpconde_claude-android-skill . android android-development
+# The router lists workflow skills this kit deliberately leaves out; drop those rows.
+perl -ni -e 'print unless m{\(\.\./(changelog|release-kotlin-library|to-plan|shepherd)/SKILL\.md\)}' "$K/.claude/skills/using-chrisbanes-skills/SKILL.md"
+
+# The Flutter index lists files that are not vendored; keep it honest.
+perl -0pi -e 's/- \*\*leancode-flutter\*\*:.*?\n\n//s; s/Generated data \(always current\):[^\n]*\n?/(The source repo also ships a `leancode-flutter` index and generated package-version files; they are not vendored here.)\n/' "$K/.claude/skills/flutter-skills-index/SKILL.md"
 
 { echo "# Vendored skill sources"; echo
   echo "Each vendored folder \`.claude/skills/<name>/\` is a copy of a third-party skill (SKILL.md + references; repo README and CHANGELOG left out; each folder carries its upstream LICENSE file unchanged). Frontmatter names are set to the folder name. Re-vendor with \`scripts/vendor-skills.sh\`; keep this table current."; echo
-  echo "| Skill | Platform | Repository (github) | Commit | Date | License |"; echo "|---|---|---|---|---|---|"; sort "$TMP"; } > "$K/.claude/skills/SOURCES.md"
+  echo "| Skill | Platform | Repository (github) | Commit | Date | License |"; echo "|---|---|---|---|---|---|"; sort "$TMP"; echo; echo "**Changes to upstream files:** frontmatter \`name\` is set to the folder name; in \`using-chrisbanes-skills\` the routing rows for \`changelog\`, \`release-kotlin-library\`, \`to-plan\` and \`shepherd\` are removed because those workflow skills are not part of this kit. In \`flutter-skills-index\` the entries for files that are not vendored are replaced by a note. Nested plugin copies (\`skills/\`, \`.claude-plugin/\`) are left out. Everything else is unchanged."; } > "$K/.claude/skills/SOURCES.md"
 rm -f "$TMP"; rm -rf "$S"
 echo "vendored $(find "$K/.claude/skills" -name SKILL.md | wc -l | tr -d ' ') skills"
 grep -h "^name:" "$K"/.claude/skills/*/SKILL.md | sort | uniq -d | sed 's/^/DUPLICATE NAME: /' || true

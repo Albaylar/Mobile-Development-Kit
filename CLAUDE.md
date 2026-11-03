@@ -20,7 +20,7 @@ Builders (`/backend /core /ui /platform`) run as forked sub-agents (`.claude/age
 ```
 .claude/rules/      general.md (always) · ios.md flutter.md android.md security.md (path-scoped) · store.md privacy.md monetization.md
 .claude/skills/     kit skills (init foundation monetization write-spec refine signoff design architecture tasks backend core ui platform perf qa release help audit)
-                    BUILDER.md (shared builder procedure) · 33 vendored third-party skills as flat folders next to them (Claude Code only discovers `.claude/skills/<name>/SKILL.md`), provenance and platform in SOURCES.md
+                    BUILDER.md (shared builder procedure) · 35 vendored third-party skills as flat folders next to them (Claude Code only discovers `.claude/skills/<name>/SKILL.md`), provenance and platform in SOURCES.md
 .claude/agents/     backend-dev core-dev ui-dev platform-dev qa-engineer perf-auditor
 docs/               USAGE.md (start here) · PRD.md · design/ (design-system.md, exports) · architecture-profile.md (per project) · adr/ · system.md · privacy.md · architecture-catalog.md · backend-selection.md · monetization.md · design-first.md · foundation-mcp.md · architecture-research.md · skills-catalog.md
 features/           INDEX.md · PROJ-X-name/{spec,architecture,tasks,perf-report,qa-report}.md

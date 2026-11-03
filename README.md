@@ -249,13 +249,13 @@ Under `.claude/rules/`; `general.md` loads in every session, the others load whe
 
 ## 12. Vendored expert skills
 
-The kit ships 33 current third-party skills with known sources. Claude Code only discovers skills at `.claude/skills/<name>/SKILL.md`, so they are **flat folders**; platform, source repository, commit and license are in `.claude/skills/SOURCES.md`.
+The kit ships 35 current third-party skills with known sources. Claude Code only discovers skills at `.claude/skills/<name>/SKILL.md`, so they are **flat folders**; platform, source repository, commit and license are in `.claude/skills/SOURCES.md`.
 
 | Platform | Skills | Main sources |
 |---|---|---|
 | iOS (14) | swiftui-pro, swiftdata-pro, swift-concurrency-pro, swift-testing-pro, swift-architecture, swiftui-performance-audit, swiftui-view-refactor, swift-security, ios-accessibility, ios-simulator, appstore-review, asc-cli-usage, asc-release-flow, asc-testflight | Paul Hudson, Thomas Ricouard, efremidze, rudrankriyam |
 | Flutter (8) | flutter-skills-index, flutter-architecture, flutter-dart-style, flutter-state-management, flutter-testing, flutter-performance, flutter-result-errors, flutter-riverpod3 | abugeek (verified against Flutter 3.47 / Dart 3.13), Ethiel97 |
-| Android (11) | using-chrisbanes-skills, compose-state-and-effects, compose-performance, compose-component-design, compose-ui-testing-patterns, kotlin-concurrency-and-flow, kotlin-control-flow, kotlin-api-design, gradle-run, android-benchmark-comparison, android-development | Chris Banes, dpconde |
+| Android (13) | using-chrisbanes-skills, compose-state-and-effects, compose-performance, compose-component-design, compose-ui-testing-patterns, compose-animations, compose-focus-navigation, kotlin-concurrency-and-flow, kotlin-control-flow, kotlin-api-design, gradle-run, android-benchmark-comparison, android-development | Chris Banes, dpconde |
 
 What was chosen, what was left out and why: `docs/skills-catalog.md`. The official Flutter plugin and the RevenueCat AI Toolkit are installed per machine, not copied (see §2).
 
@@ -274,7 +274,7 @@ README.md                     this file
     SOURCES.md                vendored skill sources
     init/ foundation/ monetization/ write-spec/ refine/ signoff/ design/ architecture/ tasks/
     backend/ core/ ui/ platform/ perf/ qa/ release/ help/ audit/       (the kit's own skills, with templates)
-    swiftui-pro/ … flutter-architecture/ … compose-performance/ …     (33 vendored skills)
+    swiftui-pro/ … flutter-architecture/ … compose-performance/ …     (35 vendored skills)
 docs/
   USAGE.md                    the complete usage map (start here)
   PRD.md                      product definition (filled by /init)
@@ -314,10 +314,10 @@ To bring a newer kit into an existing project: copy the kit's `.claude/` and `do
 ## 15. How the kit came about
 
 1. **Architecture research:** the 2026 state of SwiftUI + Observation, Swift 6.2 approachable concurrency, TCA 2.0 beta, SwiftData/GRDB; Compose + Navigation 3 + Baseline Profiles; Flutter's official architecture + Riverpod 3 / Bloc 9 + Impeller; KMP/CMP; PowerSync, Firestore, Supabase. Result: the profile catalog.
-2. **Skill research:** 21 repositories read, 33 skills chosen (recency, the author's platform track record, reference structure, no overlap, MIT/Apache).
+2. **Skill research:** 21 repositories read, 35 skills chosen (recency, the author's platform track record, reference structure, no overlap, MIT/Apache).
 3. **Rules:** the user's own rule file (MVVM-C/TCA, `@Observable`, Swift Concurrency, feature-first clean Flutter, Riverpod/Bloc, `Either`, `const`) was merged in with two corrections: a domain layer only in profile C, and `Result` + sealed failure instead of `Either`.
 4. **Dry runs:** two agents ran `/init` → `/tasks` for real on a Flutter + Supabase offline bakery app and a native iOS tide app without backend; 9 blockers, 19 contradictions and ~17 gaps were found and fixed.
-5. **Design first, backend selection, Foundation MCP** were added; foundation-mcp was written in Go (v0.2.0, tests green).
+5. **Design first, backend selection, Foundation MCP** were added; foundation-mcp was written in Go.
 6. **Skill discovery:** the vendored skills first sat in `ios/ flutter/ android/` group folders; Claude Code does not find those, so they were flattened.
 7. **Monetization:** RevenueCat / Adapty, entitlement sync per backend, cancellation and grace handling, purchase test matrix.
 
@@ -327,7 +327,7 @@ To bring a newer kit into an existing project: copy the kit's `.claude/` and `do
 - No vendored skill for the KMP shared-core profile.
 - No skill for offline sync engines; the rules are in `architecture.md` section C2.
 - No skill for Play Data Safety and Android store rules (`store.md` has them as rules).
-- Foundation MCP has no Compose sources, no Figma import command and no platform compile checks in CI yet.
+- Foundation MCP has no Compose sources and no Figma import command yet.
 - No official Adapty MCP or agent skill found; RevenueCat's AI Toolkit is the only vendor tooling.
 
 ## 17. FAQ and troubleshooting
@@ -350,6 +350,6 @@ To bring a newer kit into an existing project: copy the kit's `.claude/` and `do
 
 The kit is released under the [MIT License](LICENSE), © 2026 Furkan Deniz Albaylar.
 
-The 33 vendored skills are the work of their authors and keep their own licenses (MIT or Apache-2.0); each folder contains its upstream `LICENSE` unchanged, and `.claude/skills/SOURCES.md` lists the repository, commit and license of every one. Thanks to Paul Hudson, Thomas Ricouard, Chris Banes, Lasha Efremidze, Rudrank Riyam, Ivan Magda, Daniel Devesa, Conor Luddy, 3 Paws AI, abugeek, Ethiel97 and dpconde for publishing them.
+The 35 vendored skills are the work of their authors and keep their own licenses (MIT or Apache-2.0); each folder contains its upstream `LICENSE` unchanged, and `.claude/skills/SOURCES.md` lists the repository, commit and license of every one. Thanks to Paul Hudson, Thomas Ricouard, Chris Banes, Lasha Efremidze, Rudrank Riyam, Ivan Magda, Daniel Devesa, Conor Luddy, 3 Paws AI, abugeek, Ethiel97 and dpconde for publishing them.
 
 The design-system server lives in its own repository, [Albaylar/foundation-mcp](https://github.com/Albaylar/foundation-mcp), also MIT.

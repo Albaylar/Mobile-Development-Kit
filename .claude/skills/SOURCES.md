@@ -6,7 +6,9 @@ Each vendored folder `.claude/skills/<name>/` is a copy of a third-party skill (
 |---|---|---|---|---|---|
 | android-benchmark-comparison | android | `chrisbanes/skills` | 530d686 | 2026-11-03 | Apache-2.0 |
 | android-development | android | `dpconde/claude-android-skill` | edfca5e | 2025-12-07 | MIT |
+| compose-animations | android | `chrisbanes/skills` | 530d686 | 2026-11-03 | Apache-2.0 |
 | compose-component-design | android | `chrisbanes/skills` | 530d686 | 2026-11-03 | Apache-2.0 |
+| compose-focus-navigation | android | `chrisbanes/skills` | 530d686 | 2026-11-03 | Apache-2.0 |
 | compose-performance | android | `chrisbanes/skills` | 530d686 | 2026-11-03 | Apache-2.0 |
 | compose-state-and-effects | android | `chrisbanes/skills` | 530d686 | 2026-11-03 | Apache-2.0 |
 | compose-ui-testing-patterns | android | `chrisbanes/skills` | 530d686 | 2026-11-03 | Apache-2.0 |
@@ -37,3 +39,5 @@ Each vendored folder `.claude/skills/<name>/` is a copy of a third-party skill (
 | swiftui-performance-audit | ios | `Dimillian/Skills` | 05ba982 | 2026-03-29 | MIT |
 | swiftui-pro | ios | `twostraws/SwiftUI-Agent-Skill` | f2920b6 | 2026-10-26 | MIT |
 | swiftui-view-refactor | ios | `Dimillian/Skills` | 05ba982 | 2026-03-29 | MIT |
+
+**Changes to upstream files:** frontmatter `name` is set to the folder name; in `using-chrisbanes-skills` the routing rows for `changelog`, `release-kotlin-library`, `to-plan` and `shepherd` are removed because those workflow skills are not part of this kit. In `flutter-skills-index` the entries for files that are not vendored are replaced by a note. Nested plugin copies (`skills/`, `.claude-plugin/`) are left out. Everything else is unchanged.

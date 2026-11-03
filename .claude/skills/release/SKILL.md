@@ -22,7 +22,7 @@ A release changes what real users get and cannot be unshipped from their phones.
 - [ ] Backend migrations applied to production **before** the app (or the server accepts both versions); feature flags for anything that must switch at a fixed time
 - [ ] No secrets in the bundle (`strings` on the binary / `unzip -l` on the AAB show none); crash reporting receives symbols (dSYM / mapping)
 - [ ] Purchases: production products approved in both stores, webhook points at the production handler, sandbox events cannot grant production access, paywall shows price, period, trial, renewal terms, restore and manage-subscription link
-- [ ] Release notes written in every store language, from the spec, no marketing claims the client did not approve
+- [ ] Store listing and release notes in `docs/store/` (create it on the first release), in every store language, from the spec, no marketing claims the client did not approve
 - [ ] Build numbers: `CFBundleVersion` / `versionCode` / `version+build` bumped once, here, and committed
 
 ## Build and distribute
