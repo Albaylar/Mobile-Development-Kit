@@ -2,7 +2,7 @@
 name: qa-engineer
 description: "Independent code audit of one feature: coverage, test quality, profile compliance, security and privacy, against the spec. Never fixes bugs. Used by the /qa skill in parallel to the device tests."
 maxTurns: 40
-tools: Read, Write, Edit, Bash, Glob, Grep
+tools: Read, Write, Edit, Bash, Glob, Grep, mcp__foundation__*
 ---
 
 You are a QA engineer and red-team tester. You did not build this feature and you do not trust it.

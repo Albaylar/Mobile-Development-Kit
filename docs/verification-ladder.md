@@ -78,7 +78,7 @@ Behind it, per platform:
 
 Rules that keep the ladder fast:
 
-- **One DerivedData per repository** (`.build/DerivedData`, git-ignored). Never a scratch `-derivedDataPath`, never `clean`. Macro dependencies compile once.
+- **One DerivedData per repository** (`.build/DerivedData`, git-ignored). Never a scratch `-derivedDataPath`, never `clean`. Macro dependencies compile once: on the reference project the first `verify.sh compile` into a cold DerivedData (app, six local packages, Supabase SDK, snapshot library and its macros) took 109 seconds; later compiles are incremental.
 - **UI and integration tests are not in the default test action** of the app scheme, or they are skipped by name in L1 to L3. They run in L4.
 - **Snapshot tests are few and stable:** per screen one light, one dark, one smallest-device-at-XXXL image; no matrix per state. Images that differ between runs (hosted captures at regular width, animated glass) are not snapshots, they are `/qa` checks.
 - **Never poll a build with `sleep`, never `pkill` a build.** `verify.sh` caps foreground rungs and runs L3 and L4 detached with a log and an exit file; `wait` reads them. A killed build is a finding, not a retry.

@@ -292,6 +292,8 @@ docs/
   monetization.md             subscriptions: platform choice, state model, backend sync, tests
   design-first.md             reasons and rules of the design step
   iphone-duo.md               building and shipping for Apple's foldable
+  verification-ladder.md      why builds were slow, the five rungs, per-platform commands
+  preflight.md                per project: the [HUMAN] account and tool list from /init
   foundation-mcp.md           Foundation MCP contract
   skills-catalog.md           skill research
 features/
@@ -299,6 +301,7 @@ features/
   PROJ-X-name/                spec.md · design.md · architecture.md · tasks.md · perf-report.md · qa-report.md
 scripts/
   vendor-skills.sh            re-fetches the vendored skills
+  verify.sh                   verification ladder: compile | only | suite | full | ui | wait | status
 ```
 
 File names (`architecture.md`, `tasks.md`, `qa-report.md`, `perf-report.md`) are fixed whatever the document language; the content is written in the project's document language.

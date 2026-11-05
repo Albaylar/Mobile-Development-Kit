@@ -293,6 +293,7 @@ Status becomes **Released (in review)**. When the stores approve: verify the upg
 | QA: "test without claim" | a test passes even when the behavior is broken | the builder rewrites it to assert the AC's result |
 | QA: "not ordered" | something was built no task asked for | decide: keep it (then `/refine`) or remove it |
 | Foundation tools missing | Claude Code not restarted after `.mcp.json`, server not approved, absolute paths wrong | `/foundation status` |
+| Foundation works in the main session but `/ui` reports its tools missing | the agent file's `tools:` list leaves out MCP tools | `.claude/agents/ui-dev.md` must list `mcp__foundation__*` (kit v0.2 does) |
 | Figma MCP returns nothing | Dev Mode off, nothing selected, desktop MCP disabled | open the file in Dev Mode, select the frame |
 | Premium vanished after cancel | handler revoked on CANCELLATION | fix: revoke only on expiration/refund (`docs/monetization.md` §3) |
 | User cancelled, still premium | correct until `expires_at` | nothing to fix |
@@ -356,6 +357,7 @@ Figma for client work with a designer; Claude Design for fast internal mock-ups;
 /release PROJ-X               stores (you)
 /refine PROJ-X                change a spec
 /audit                        health check
+scripts/verify.sh compile|only|suite|full|ui|wait|status   the verification ladder (builders and QA)
 ```
 
 Statuses: `Roadmap → Planned → Signed Off → (Designed) → Architected → In Progress → In Review → Approved → Accepted → Released (in review) → Released`

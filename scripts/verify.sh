@@ -18,14 +18,14 @@
 #   VERIFY_ANDROID_MODULES  Gradle modules for L3 (default: :app)
 #   VERIFY_LOG_DIR       default .build/verify
 set -u
-root="$(cd "$(dirname "$0")/.." && pwd)"
+root="${VERIFY_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"   # VERIFY_ROOT: run the kit copy against another checkout
 cd "$root"
 [ -f .verify.env ] && . ./.verify.env
 log_dir="${VERIFY_LOG_DIR:-.build/verify}"
 mkdir -p "$log_dir"
 
 # Budgets in seconds. A run over budget is killed and reported; the fix is in the harness, never in skipping the rung.
-CAP_L0=300; CAP_L1=120; CAP_L2=300
+CAP_L0=${VERIFY_CAP_L0:-300}; CAP_L1=${VERIFY_CAP_L1:-120}; CAP_L2=${VERIFY_CAP_L2:-300}   # the first compile into a cold DerivedData may need VERIFY_CAP_L0=580 once
 
 die() { echo "verify: $*" >&2; exit 2; }
 
@@ -85,7 +85,7 @@ summarize() {
 ios_setup() {
   dd="$root/.build/DerivedData"
   xflags=(-derivedDataPath "$dd" -skipMacroValidation -skipPackagePluginValidation -disableAutomaticPackageResolution -quiet)
-  scheme="${VERIFY_SCHEME:-$(xcodebuild -list -json 2>/dev/null | python3 -c 'import json,sys; d=json.load(sys.stdin); p=d.get("project") or d.get("workspace"); print(p["schemes"][0])' 2>/dev/null)}"
+  scheme="${VERIFY_SCHEME:-$(xcodebuild -list -json 2>/dev/null | python3 -c 'import json,sys; d=json.load(sys.stdin); p=d.get("project") or d.get("workspace"); s=p["schemes"]; print(p["name"] if p["name"] in s else s[0])' 2>/dev/null)}"
   [ -n "$scheme" ] || die "set VERIFY_SCHEME"
   if [ -z "${VERIFY_DESTINATION:-}" ]; then
     local booted; booted=$(xcrun simctl list devices booted -j | python3 -c 'import json,sys; d=json.load(sys.stdin)["devices"]; ids=[x["udid"] for v in d.values() for x in v if "iPhone" in x["name"]]; print(ids[0] if ids else "")')
@@ -98,7 +98,7 @@ ios_setup() {
   fi
   skip_ui=(); for t in $VERIFY_UI_TARGETS; do skip_ui+=("-skip-testing:$t"); done
 }
-ios_xctestrun() { ls -t "$dd"/Build/Products/*.xctestrun 2>/dev/null | head -1; }
+ios_xctestrun() { local f; f=$(ls -t "$dd"/Build/Products/*.xctestrun 2>/dev/null | head -1); [ -n "$f" ] && echo "$f"; }
 ios_build_for_testing() { xcodebuild -scheme "$scheme" -destination "$dest" "${xflags[@]}" build-for-testing; }
 ios_packages() {
   if [ -n "${VERIFY_PACKAGES:-}" ]; then echo "$VERIFY_PACKAGES"; else
@@ -149,7 +149,7 @@ ios)
     status)
       echo "platform ios · scheme $scheme · destination $dest · UI targets: ${VERIFY_UI_TARGETS:-none}"
       echo "DerivedData: $( [ -d "$dd" ] && du -sh "$dd" | cut -f1 || echo cold ) · xctestrun: $(ios_xctestrun || echo none) · packages: $(ios_packages)"
-      for f in "$log_dir"/*.exit; do [ -f "$f" ] && echo "$(basename "$f" .exit): exit $(cat "$f") ($(date -r "$f" '+%H:%M'))"; done ;;
+      for f in "$log_dir"/*.exit; do [ -f "$f" ] && echo "$(basename "$f" .exit): exit $(cat "$f") ($(date -r "$f" '+%H:%M'))"; done; exit 0 ;;
   esac ;;
 flutter)
   case "$cmd" in
@@ -161,7 +161,7 @@ flutter)
     suite) run_capped $CAP_L2 "$log_dir/suite.log" flutter test "${1:-test}"; rc=$?; summarize "$log_dir/suite.log" || rc=1; exit $rc ;;
     full) run_detached full bash -c "cd $(printf %q "$root") && flutter analyze && dart format --set-exit-if-changed lib test && flutter test" ;;
     ui) [ -d integration_test ] || die "no integration_test/ directory"; run_detached ui bash -c "cd $(printf %q "$root") && flutter test integration_test ${VERIFY_DEVICE:+-d $VERIFY_DEVICE}" ;;
-    status) echo "platform flutter · $(flutter --version 2>/dev/null | head -1)"; for f in "$log_dir"/*.exit; do [ -f "$f" ] && echo "$(basename "$f" .exit): exit $(cat "$f")"; done ;;
+    status) echo "platform flutter · $(flutter --version 2>/dev/null | head -1)"; for f in "$log_dir"/*.exit; do [ -f "$f" ] && echo "$(basename "$f" .exit): exit $(cat "$f")"; done; exit 0 ;;
   esac ;;
 android)
   mods="${VERIFY_ANDROID_MODULES:-:app}"
@@ -174,6 +174,6 @@ android)
     suite) m=${1:-:app}; run_capped $CAP_L2 "$log_dir/suite.log" ./gradlew "$m:testDebugUnitTest"; rc=$?; summarize "$log_dir/suite.log" || rc=1; exit $rc ;;
     full) tasks=""; for m in $mods; do tasks="$tasks $m:lint $m:testDebugUnitTest"; done; run_detached full bash -c "cd $(printf %q "$root") && ./gradlew$tasks" ;;
     ui) run_detached ui bash -c "cd $(printf %q "$root") && ./gradlew connectedDebugAndroidTest" ;;
-    status) echo "platform android · modules $mods"; for f in "$log_dir"/*.exit; do [ -f "$f" ] && echo "$(basename "$f" .exit): exit $(cat "$f")"; done ;;
+    status) echo "platform android · modules $mods"; for f in "$log_dir"/*.exit; do [ -f "$f" ] && echo "$(basename "$f" .exit): exit $(cat "$f")"; done; exit 0 ;;
   esac ;;
 esac
