@@ -76,7 +76,8 @@ wait_for() {
 summarize() {
   local log=$1 n
   grep -E "Test run with|Executed [0-9]+ tests?|✘|error:|warning:|\*\* (TEST|BUILD) (SUCCEEDED|FAILED)|All tests passed|Some tests failed|tests passed|FAILED|BUILD SUCCESSFUL|No issues found" "$log" | grep -v "Executed 0 tests" | cut -c1-200 | tail -40
-  n=$(grep -hoE "Test run with [0-9]+ test|Executed [0-9]+ tests?|\+[0-9]+(: All tests passed| ~[0-9]+ -[0-9]+)|[0-9]+ tests completed" "$log" | grep -oE "[0-9]+" | awk '{s+=$1} END {print s+0}')
+  # Swift Testing: "Test run with N tests in M suites passed"; XCTest: "Executed N tests"; Flutter: "+N: All tests passed"; Gradle: "N tests completed"
+  n=$(grep -hoE "Test run with [0-9]+ tests?|Executed [0-9]+ tests?|\+[0-9]+(: All tests passed| ~[0-9]+ -[0-9]+)|[0-9]+ tests completed" "$log" | grep -oE "[0-9]+" | awk '{s+=$1} END {print s+0}')
   echo "verify: tests counted in log: $n"
   if [ "$n" = "0" ]; then echo "verify: 0 tests ran: this counts as FAILED"; return 1; fi
   return 0
@@ -84,7 +85,9 @@ summarize() {
 
 ios_setup() {
   dd="$root/.build/DerivedData"
-  xflags=(-derivedDataPath "$dd" -skipMacroValidation -skipPackagePluginValidation -disableAutomaticPackageResolution -quiet)
+  # -quiet only for builds: with it xcodebuild prints no test counts, and "0 tests = failed" needs them.
+  xflags=(-derivedDataPath "$dd" -skipMacroValidation -skipPackagePluginValidation -disableAutomaticPackageResolution)
+  bflags=("${xflags[@]}" -quiet)
   scheme="${VERIFY_SCHEME:-$(xcodebuild -list -json 2>/dev/null | python3 -c 'import json,sys; d=json.load(sys.stdin); p=d.get("project") or d.get("workspace"); s=p["schemes"]; print(p["name"] if p["name"] in s else s[0])' 2>/dev/null)}"
   [ -n "$scheme" ] || die "set VERIFY_SCHEME"
   if [ -z "${VERIFY_DESTINATION:-}" ]; then
@@ -99,12 +102,13 @@ ios_setup() {
   skip_ui=(); for t in $VERIFY_UI_TARGETS; do skip_ui+=("-skip-testing:$t"); done
 }
 ios_xctestrun() { local f; f=$(ls -t "$dd"/Build/Products/*.xctestrun 2>/dev/null | head -1); [ -n "$f" ] && echo "$f"; }
-ios_build_for_testing() { xcodebuild -scheme "$scheme" -destination "$dest" "${xflags[@]}" build-for-testing; }
+ios_build_for_testing() { xcodebuild -scheme "$scheme" -destination "$dest" "${bflags[@]}" build-for-testing; }
 ios_packages() {
   if [ -n "${VERIFY_PACKAGES:-}" ]; then echo "$VERIFY_PACKAGES"; else
     find . -maxdepth 4 -name Package.swift -not -path '*/.build/*' -not -path './Package.swift' -exec dirname {} \; | sort | tr '\n' ' '; fi
 }
-pkg_scheme() { python3 -c 'import re,sys; s=open(sys.argv[1]).read(); print(re.search(r"name:\s*\"([^\"]+)\"",s).group(1))' "$1/Package.swift"; }
+# A package's test action lives on the "<Name>-Package" scheme when SwiftPM generates one; the bare "<Name>" scheme is the library only.
+pkg_scheme() { local n; n=$(python3 -c 'import re,sys; s=open(sys.argv[1]).read(); print(re.search(r"name:\s*\"([^\"]+)\"",s).group(1))' "$1/Package.swift"); if (cd "$1" && xcodebuild -list 2>/dev/null | grep -qx "        $n-Package"); then echo "$n-Package"; else echo "$n"; fi; }
 
 cmd=${1:-}; shift || true
 case "$cmd" in
@@ -119,7 +123,7 @@ ios)
   ios_setup
   case "$cmd" in
     compile)
-      if [ -n "${1:-}" ]; then s=$(pkg_scheme "$1"); run_capped $CAP_L0 "$log_dir/compile.log" bash -c "cd $(printf %q "$1") && xcodebuild -scheme $(printf %q "$s") -destination $(printf %q "$dest") $(printf '%q ' "${xflags[@]}") build"
+      if [ -n "${1:-}" ]; then s=$(pkg_scheme "$1"); run_capped $CAP_L0 "$log_dir/compile.log" bash -c "cd $(printf %q "$1") && xcodebuild -scheme $(printf %q "$s") -destination $(printf %q "$dest") $(printf '%q ' "${bflags[@]}") build"
       else run_capped $CAP_L0 "$log_dir/compile.log" ios_build_for_testing; fi; rc=$?
       grep -E "error:|warning:" "$log_dir/compile.log" | head -20; exit $rc ;;
     only)

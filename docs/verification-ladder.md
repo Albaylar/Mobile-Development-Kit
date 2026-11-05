@@ -15,7 +15,16 @@ The first app built with the kit (native iOS, profile B, Supabase, two infrastru
 | Targeted test runs (`-only-testing:`) | 32 | 8 |
 | Compile-only runs | 21 | 39 |
 
-One `/ui` run of three tasks lasted 102 minutes; 65 of them were 18 full-scheme test runs of 4 to 10 minutes each. A targeted run of the same project (`-only-testing:<App>Tests/LocalizationTests`) took about one minute. The two ran on the same machine, same day.
+One `/ui` run of three tasks lasted 102 minutes; 65 of them were 18 full-scheme test runs of 4 to 10 minutes each. The same project through `scripts/verify.sh`, same machine, same day, warm DerivedData:
+
+| Rung | Command | Wall time | Tests |
+|---|---|---|---|
+| L0 first compile into a cold `.build/DerivedData` (app, six packages, backend SDK, snapshot macros) | `verify.sh compile` | 109 s, once | |
+| L1 one suite of the app target | `verify.sh only <App>Tests/LocalizationTests` | 62 s (28 s testing, the rest the incremental `build-for-testing`) | 3 |
+| L2 one core package | `verify.sh suite Packages/Core/Account` | 26 s | 22 |
+| L2 app target without UI tests (unit + snapshot) | `verify.sh suite` | 22 s alone, 56 s while another `xcodebuild` ran on the same checkout | 30 |
+
+Against 4 to 10 minutes per full-scheme run before: roughly ten times less waiting per red→green step, with the same tests.
 
 Where the minutes came from, in order of weight:
 
