@@ -15,8 +15,9 @@ These rules apply to every project built with this kit, on every platform. Platf
 
 ## Code quality and verification
 - Always read an existing file before modifying it. Never guess type names, module names, package versions or API signatures: read the project, `Package.swift`, `pubspec.yaml`, `build.gradle.kts`, or current docs (Context7, else the official docs, and say so).
-- A task is not complete while the type checker, analyzer or compiler reports an error or a new warning: `xcodebuild … -quiet` (iOS), `flutter analyze` + `dart format --set-exit-if-changed` (Flutter), `./gradlew :app:compileDebugKotlin lint` (Android). Zero new warnings, not "mostly green".
-- Test first: every AC and EC in a spec has a test that fails before the code exists and passes after (unit, widget/Compose/SwiftUI snapshot, or integration/UI test). Red is proven by sabotage. Never weaken an assertion to go green. 0 tests run counts as failed.
+- A task is not complete while the type checker, analyzer or compiler reports an error or a new warning. Zero new warnings, not "mostly green".
+- Test first: every AC and EC in a spec has a test that fails before the code exists and passes after (unit, widget/Compose/SwiftUI snapshot, or integration/UI test). Red is proven by running the new test before the code; sabotage is `/qa`'s tool (and the builder's only in fix mode, where the code already exists). Never weaken an assertion to go green. 0 tests run counts as failed.
+- **Verification ladder** (`docs/verification-ladder.md`, commands in `scripts/verify.sh`): L0 compile after every edit, L1 only the task's tests (red, then green), L2 the touched module's suite once per level, L3 the full command once before the builder reports (detached, UI tests excluded), L4 UI/integration tests, snapshot matrix, device poses and sabotage in `/qa`. Nobody runs the full suite after a single step; nobody skips L3 before reporting. One DerivedData per repository, no `clean`, no `sleep` polling, no `pkill` on builds. A run over its budget is reported as "test loop too slow", never answered by weakening a rung.
 - No overengineering: the simplest thing that satisfies the spec and the profile. No abstraction, option, dependency or layer nobody asked for. A domain/use-case layer exists only where the profile says so.
 - Errors are values at layer boundaries (Swift `Result`/typed `throws`, Dart `Result<T>`/sealed failure, Kotlin `Result`/sealed class). Nothing throws across a layer boundary; the UI never sees raw HTTP codes or exception text.
 - Immutable state models. The UI renders state, it does not mutate models.
@@ -40,6 +41,7 @@ These rules apply to every project built with this kit, on every platform. Platf
 ## Gates
 Roadmap → Planned → **Signed Off** → (Designed) → Architected → In Progress → In Review → Approved → **Accepted** → Released (in review) → Released
 - Gate 1: the client approved the spec. Gate 2: the client accepted the build (TestFlight / internal track link). Never skip a gate.
+- **Solo mode:** when the PRD names the reviewer as "owner (self-reviewed)", the gates stay but the ceremony goes: `/signoff` records in one step without an interview, `/design` is skipped for features without a screen, `/architecture` and `/tasks` ask once at the end, each documentation step commits once. Infrastructure features carry at most 8 AC and 4 EC; the roadmap shows a product-visible screen by the third feature.
 - `/ui`, `/core`, `/platform`, `/backend` refuse to start without `tasks.md`. Sub-agents never ask: they stop and report.
 - `/qa` decides, never a builder: it runs in the main conversation (simulator) with the independent `qa-engineer` agent in parallel; neither fixes anything. Fix loop: In Progress → builder (failing test first) → `/qa` → acceptance again.
 - Store review is outside our control: `/release` records submission and outcome, a rejection reopens the fix loop.
@@ -49,4 +51,6 @@ Roadmap → Planned → **Signed Off** → (Designed) → Architected → In Pro
 - Build numbers (`CFBundleVersion`, `versionCode`, `version+build` in `pubspec.yaml`) change only in `/release`.
 
 ## Human in the loop
-- One question at a time, always with a recommended answer. Ask before finalizing a deliverable and before the next workflow step. Suggest the next command.
+- One question at a time, always with a recommended answer. Ask before finalizing a deliverable; suggest the next command instead of asking permission for it. Account, tool and dashboard work is collected once in the `[HUMAN]` pre-flight list from `/init`, not discovered inside builder runs.
+- One Claude Code session per checkout. Parallel work runs as sub-agents inside it, never as a second session on the same working tree.
+- Builders commit after every task and leave a one-line progress note, so a resume costs a minute: it reads ticks and `git log`, it does not re-run suites to find out where it is. A builder that stops without a report has failed its run.

@@ -20,7 +20,7 @@ Do the platform integration for feature $ARGUMENTS. Follow `.claude/skills/BUILD
 - Flutter: platform channels or federated plugins per profile; native code only where no maintained plugin exists, and then on both platforms.
 
 ## Tests
-Unit tests for the routing of deep links and for permission-state handling; manual steps for the main conversation listed per platform (denied permission, revoked permission, link from a cold start, push with the app killed).
+Unit tests for the routing of deep links and for permission-state handling, run targeted (`verify.sh only --module <platform package> <Suite>`); stubbed HTTP, never the live service, inside the loop. Manual steps for the main conversation listed per platform (denied permission, revoked permission, link from a cold start, push with the app killed).
 
 ## Report
 Next: "`/perf PROJ-X`" if the profile's budgets are touched, else "`/qa PROJ-X`". List store-review-relevant changes explicitly.

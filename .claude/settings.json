@@ -47,9 +47,12 @@
       "Bash(./gradlew test:*)",
       "Bash(./gradlew assembleDebug:*)",
       "Bash(go build:*)",
-    "Bash(go test:*)",
-    "Bash(go version:*)",
-    "Bash(ls:*)"
+      "Bash(go test:*)",
+      "Bash(go version:*)",
+      "Bash(ls:*)",
+      "Bash(scripts/verify.sh:*)",
+      "Bash(./scripts/verify.sh:*)",
+      "Bash(supabase test db:*)"
     ]
   }
 }

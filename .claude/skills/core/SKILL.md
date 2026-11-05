@@ -21,7 +21,7 @@ Build the non-UI layers for feature $ARGUMENTS. Follow `.claude/skills/BUILDER.m
 - Purchases: one `EntitlementService` behind a protocol wrapping the platform SDK (RevenueCat / Adapty); `logIn` with the backend user id after sign-in, `logOut` on sign-out; UI reads entitlement state from it; server-gated data is never unlocked from the client flag alone (`rules/monetization.md`).
 
 ## Tests
-Unit tests with fakes (not mocks of internals) for every repository and state holder: happy path, failure path per `AppFailure` case, offline/retry, concurrent double call. Test command from the platform rule file; `swift-testing-pro` / `flutter-testing` / `compose-ui-testing-patterns` for patterns.
+Unit tests with fakes (not mocks of internals) for every repository and state holder: happy path, failure path per `AppFailure` case, offline/retry, concurrent double call. Core packages have no UI dependency, so their L1 and L2 runs (`verify.sh only --module <package> <Suite>`, `verify.sh suite <package>`) need no app build; patterns from `swift-testing-pro` / `flutter-testing` / `compose-ui-testing-patterns`.
 
 ## Handoff
 Next: "`/ui PROJ-X`" (or `/platform` if no [UI] tasks remain, else `/qa`).

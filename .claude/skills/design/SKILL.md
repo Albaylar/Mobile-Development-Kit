@@ -12,7 +12,7 @@ Screens are decided here, not while coding. Read `docs/design-first.md` first.
 
 ## Before starting
 1. Read `features/INDEX.md`, `features/PROJ-X-name/spec.md`, `docs/PRD.md` (input 5: design source), `docs/design/design-system.md`.
-2. **Gate:** status Signed Off. No design source in the PRD → "This project has no design source; skip to `/architecture PROJ-X`." Stop.
+2. **Gate:** status Signed Off. No design source in the PRD → "This project has no design source; skip to `/architecture PROJ-X`." Stop. Type Infrastructure, or a spec whose AC name no screen → "Nothing to design: no screen in this spec; continue with `/architecture PROJ-X`." Stop, status unchanged, no commit.
 3. Connect the source: Figma MCP (desktop needs Dev Mode in the file; remote needs the file link) or the Claude Design artifact. The PRD says the project uses the Foundation MCP but `.mcp.json` has no `foundation` server, or its tools are not in this session → run `/foundation setup` first (it clones, builds and loads the design tokens). Configured → list its components and tokens first.
 
 ## Work

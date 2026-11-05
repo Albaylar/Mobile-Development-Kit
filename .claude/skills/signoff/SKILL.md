@@ -12,7 +12,8 @@ disable-model-invocation: true
 What was approved is written down with date, person, channel and the exact build or commit.
 
 ## Before starting
-Read `features/PROJ-X-*/spec.md` (gate 2 also `qa-report.md`) and `features/INDEX.md`. Gate type missing → ask "Spec approval or acceptance of the result?".
+Read `features/PROJ-X-*/spec.md` (gate 2 also `qa-report.md`), `features/INDEX.md` and the reviewer line in `docs/PRD.md`. Gate type missing → ask "Spec approval or acceptance of the result?".
+**Solo mode:** the PRD names the reviewer as "owner (self-reviewed)" → no interview. The person is the owner, the channel "internal (self)", the date today (gate 2: the build from `qa-report.md`); open questions are listed once and count as accepted as open unless the owner objects. Write the line, update INDEX.md, commit, hand off. One command, one commit.
 
 ## Gate 1: `spec`
 - Required status: Planned. Otherwise explain and stop.

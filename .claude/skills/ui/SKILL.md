@@ -22,7 +22,7 @@ Build the screens for feature $ARGUMENTS. Follow `.claude/skills/BUILDER.md`; th
 - Performance habits: stable identity in lists, no work in `body`/`build`/composition, lazy lists, images sized to the slot (`swiftui-performance-audit`, `flutter-performance`, `compose-performance`).
 
 ## Tests
-Per screen: a screen/widget/Compose test for each AC the screen fulfils, asserting the visible result; snapshot/golden tests from profile B (light/dark, smallest screen, XXXL font). `swiftui-pro` review checklist before reporting.
+Per screen: a screen/widget/Compose test for each AC the screen fulfils, asserting the visible result; snapshot/golden tests from profile B: one light, one dark, one smallest-device-at-XXXL image per screen, nothing that renders differently between runs. L1 runs the screen's suite only (`verify.sh only <Target>/<ScreenTests>`); XCUITest / integration tests are written here when a task asks for them but run once in L4 by `/qa`, never per step. `swiftui-pro` review checklist before reporting.
 
 ## Report
 List for the main conversation what to check on simulator/emulator: smallest device, XXXL font, dark mode, rotation, VoiceOver/TalkBack pass. Next: "`/platform PROJ-X`" if [PLAT] tasks exist, else "`/qa PROJ-X`".

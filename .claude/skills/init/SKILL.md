@@ -30,7 +30,7 @@ You are an experienced mobile product strategist. The client may sit next to the
 3. **Backend and login:** none / existing API / Supabase / Firebase / other, from `docs/backend-selection.md`. Sync across devices or users? Which login? Who creates the backend project?
 4. **Offline:** must the app work without network, and must writes made offline survive? Offline-first is the expensive answer; say so. Realtime needs?
 5. **Design source:** Figma file (with Dev Mode / MCP access), Claude Design artifact, existing design system, or none (platform defaults, themed later). Provided → `docs/design/design-system.md` (colors as hex, type scale, spacing, components, icon set) and a note in the PRD. With a design source the workflow has a `/design` step and the status Designed. Ask also: **use the Foundation MCP** (shared components via `github.com/Albaylar/foundation-mcp`)? Recommendation: yes for every client app, so components are not redesigned per project. Yes → record it in input 5 and run `/foundation setup` once the PRD is saved.
-6. **Store accounts and signing:** Apple Developer Program and Google Play Console exist? Who owns certificates and signs? → [HUMAN] tasks in the first feature built.
+6. **Store accounts and signing:** Apple Developer Program and Google Play Console exist? Who owns certificates and signs? → the pre-flight list (output 5), not tasks inside a feature.
 7. **UI languages.**
 8. **Analytics and crash reporting:** none, or a named service (needs a privacy entry; iOS possibly ATT).
 . **Monetization:** none / one-time purchases / subscriptions. Anything sold → a subscription platform (RevenueCat by default, Adapty when paywall experiments drive the business; `docs/monetization.md`) and `/monetization` right after the PRD is saved. Recommendation for subscriptions: one entitlement, monthly + yearly, trial, grace period on.
@@ -39,17 +39,20 @@ You are an experienced mobile product strategist. The client may sit next to the
 1. `docs/PRD.md` filled completely in the document language, template headings kept, placeholder line removed. The "Architecture inputs" table has one row per decision above (ten rows), so `/architecture` does not ask again.
 2. `features/INDEX.md`: every feature as a row: ID, name, type (Feature / Infrastructure), priority (P0 MVP, P1 next, P2 later), depends on, status Roadmap, owner (the user, or empty), folder and docs empty, effort estimate if discussed. Update "Next Available ID".
    - One feature = one testable, shippable unit. Split by user role, screen and entity.
-   - **PROJ-1 is whichever comes first:** "Backend and auth setup" (type Infrastructure) if there is a backend, else "App shell and navigation". The app shell feature always exists and includes **creating the project** (Xcode project / Flutter project / Gradle project, bundle id, team, scheme, localization wiring, theme, root navigation with empty screens) plus the [HUMAN] signing and account tasks. Every other feature depends on it; `/tasks` refuses to plan a feature whose dependencies are below Architected.
+   - **PROJ-1 is whichever comes first:** "Backend and auth setup" (type Infrastructure) if there is a backend, else "App shell and navigation". The app shell feature always exists and includes **creating the project** (Xcode project / Flutter project / Gradle project, bundle id, team, scheme, localization wiring, theme, root navigation with empty screens, the `scripts/verify.sh` harness proven under two minutes for L1). Every other feature depends on it; `/tasks` refuses to plan a feature whose dependencies are below Architected.
+   - **Infrastructure diet:** backend setup is auth plus the first table the first product feature needs; promotion scripts, production projects, schedules and admin tooling join the feature that needs them. The build order shows a **product-visible screen by the third feature at the latest**; if the P0 list cannot, say so and split the infrastructure.
    - Account deletion is its own feature (P0 when there are accounts). Selling something adds "Paywall and purchase" and, when any server feature is premium, "Entitlement sync" (Infrastructure); `/monetization` details them. Master-data import or admin entry is its own feature when the app needs reference data.
 3. PRD section "Data model (draft)": main entities in plain words.
 4. Present PRD draft, feature map with build order and data model; apply feedback; save.
+5. `docs/preflight.md`: every account, tool and dashboard step a person must do before PROJ-1 is planned, as a `[HUMAN]` checklist with the owner: developer accounts and team id, backend organization and plan, Docker or the local stack, simulators and emulators (the smallest supported device, the iPhone Duo), CLIs (`asc`, `supabase`, `flutter`), subscription dashboard, design source access. Builders never discover these inside a run; `/tasks` links the list instead of repeating it.
 
 Do NOT write spec files (`/write-spec`), the profile (`/architecture`), designs (`/design`) or code.
 
 ## Checklist
 - [ ] PRD complete, no placeholders; ten architecture inputs recorded
 - [ ] Features in INDEX.md with status Roadmap, type, dependencies; next ID updated
-- [ ] Launch date checked against the P0 list
+- [ ] Launch date checked against the P0 list; a product-visible screen by the third feature
+- [ ] `docs/preflight.md` written, every item with an owner
 - [ ] User approved PRD and feature map
 
 ## Handoff

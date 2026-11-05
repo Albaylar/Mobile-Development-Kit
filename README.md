@@ -225,6 +225,7 @@ If the app sells anything, `/init` records it (input 10) and `/monetization` pla
 ## 10. Quality: test first, independent QA, performance
 
 - **Test first.** For every AC and EC a failing test is written first and shown red, then the code. **0 tests run counts as failed.** An assertion is never weakened to go green.
+- **Verification ladder** (`docs/verification-ladder.md`, `scripts/verify.sh`). Compile after every edit (L0), only the task's tests for red and green (L1, under 2 minutes), the module's suite once per level (L2), the full command once before a builder reports (L3, detached, under 10 minutes), UI tests, snapshot matrix, device poses and sabotage in `/qa` (L4). Measured on the first app built with the kit: a full-scheme run after every step cost 229 minutes over two features; a targeted run of the same project takes a minute.
 - **Sabotage.** QA deliberately breaks the behavior behind the two most important AC tests; a test that stays green is a high-severity "test without claim" bug.
 - **Severity.** Critical (security, data loss, crash on the main flow, certain store rejection), High (AC fails, budget unproven, purchase case missing), Medium (workaround exists), Low (cosmetic).
 - **Performance budgets** (in the profile): cold start ≤ 400 ms, dropped frames while scrolling ≤ 1 %, memory and size from the PRD. Measured only on release/profile builds on the lowest device.
@@ -237,7 +238,7 @@ Under `.claude/rules/`; `general.md` loads in every session, the others load whe
 
 | File | Essence |
 |---|---|
-| `general.md` | read before you change; not done while type/analysis errors or **new warnings** exist; layer separation; the profile is binding; errors are values; explicit concurrency; no secrets in the bundle; permissions at the moment of use; offline is normal; i18n from the first screen; statuses and gates; git rules |
+| `general.md` | read before you change; not done while type/analysis errors or **new warnings** exist; the verification ladder; layer separation; the profile is binding; errors are values; explicit concurrency; no secrets in the bundle; permissions at the moment of use; offline is normal; i18n from the first screen; statuses and gates; solo mode; one session per checkout; git rules |
 | `ios.md` | MVVM-C or TCA (never mixed); ViewModels do not import SwiftUI; protocols injected through the initializer; Swift Concurrency only; MainActor by default, set again in every SPM package; iOS 17 `@Observable`; SwiftData / GRDB / Core Data choice; Swift Testing |
 | `flutter.md` | official layering; feature-first folders; domain layer only in profile C; Riverpod 3 or Bloc 9 (never both, no GetX); immutable state; `Result<T>` + sealed `AppFailure` (no dartz); `const`; heavy work in isolates |
 | `android.md` | Compose + UDF; Navigation 3; `api/impl` modules; Hilt; coroutines/Flow; R8 + Baseline Profile |
@@ -246,7 +247,7 @@ Under `.claude/rules/`; `general.md` loads in every session, the others load whe
 | `privacy.md` | data region; every SDK in `docs/privacy.md`; location only when needed; no personal data in logs; synthetic test data |
 | `monetization.md` | subscription platform; user id; client gates UI, server gates data; webhook rules; revoke only when access ends; purchase test matrix |
 
-`.claude/settings.json`: force push denied; `.env`, `.p12`, `.p8`, `.mobileprovision`, `.jks`, `.keystore`, `key.properties`, `GoogleService-Info.plist`, `google-services.json` cannot be read; build and test commands are allowed.
+`.claude/settings.json`: force push denied; `.env`, `.p12`, `.p8`, `.mobileprovision`, `.jks`, `.keystore`, `key.properties`, `GoogleService-Info.plist`, `google-services.json` cannot be read; build and test commands and `scripts/verify.sh` are allowed.
 
 ## 12. Vendored expert skills
 

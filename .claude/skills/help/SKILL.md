@@ -28,6 +28,7 @@ Answer in the user's language. Be short.
 - In Progress with bugs in `qa-report.md` or "Acceptance" → fix with the owning builder, then `/qa PROJ-X`
 - In Progress → first open task decides: [BE] `/backend`, [CORE] `/core`, [UI] `/ui`, [PLAT] `/platform`; all ticked → `/qa PROJ-X`; budgets touched → `/perf PROJ-X` before `/qa`
 - In Review → `/qa PROJ-X` was interrupted: run again
+- A builder run took hours, or "test loop too slow" appears in `tasks.md` → `scripts/verify.sh status`, then the harness task from `docs/verification-ladder.md` §3 before the next builder
 - Approved → waiting for the client: send the TestFlight / internal-track build, then `/signoff PROJ-X acceptance`
 - Accepted → merge the feature PR into `dev`, then `/release PROJ-X`
 - Released (in review) → waiting for the store; a rejection reopens the fix loop

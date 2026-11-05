@@ -20,14 +20,14 @@ A good plan is why the build stays small and complete: nothing forgotten, nothin
 Copy `template.md` to `features/PROJ-X-name/tasks.md`.
 
 **Levels** in this order, leave empty ones out:
-1. **Groundwork and connection tests:** [HUMAN] settings (developer account, certificates, dashboard, secrets), minimal live test of every new external service, new packages added to the manifest with the version from `architecture.md` F. Non-[HUMAN] tasks here carry the tag of the **first builder that runs** for this feature ([BE] if there are [BE] tasks, else [CORE]).
+1. **Groundwork and connection tests:** [HUMAN] steps this feature needs that `docs/preflight.md` does not cover (link the pre-flight items, do not repeat them), minimal live test of every new external service, new packages added to the manifest with the version from `architecture.md` F. Non-[HUMAN] tasks here carry the tag of the **first builder that runs** for this feature ([BE] if there are [BE] tasks, else [CORE]). **The first feature with app code** adds the harness task: `scripts/verify.sh` configured (`.verify.env`: scheme, destination, UI targets), the app scheme's test action without UI targets, one `.build/DerivedData`, `verify.sh only` proven under two minutes and `verify.sh full` under ten.
 2. **Backend** [BE]: tables, policies, functions, API contracts, server tests.
 3. **Core** [CORE]: models, repositories, services, local store, sync, state holders, **protocols for platform services and their fakes**, unit tests.
 4. **UI** [UI]: screens, navigation, components, screen tests, snapshot/golden tests, exactly the approved design frames.
 5. **Platform** [PLAT]: **implementations** of the platform protocols, permissions, push, deep links, background, extension targets with their build settings, manifests, store-review items.
 6. **Hardening:** loading, error, empty and offline states; smallest screen and XXXL font; dark mode; accessibility; localization complete; `docs/system.md`; [HUMAN] store listing or test-group steps.
 
-**Each task:** one checkable result, 15 to 90 minutes, tagged, [P] if independent within its level, names the AC/EC it fulfils (groundwork: `fulfils: basis for T-n`). Only what spec, design and profile require; anything else goes to "Notes" as a possible change request.
+**Each task:** one checkable result, 15 to 60 minutes, tagged, [P] if independent within its level, names the AC/EC it fulfils (groundwork: `fulfils: basis for T-n`) and the test suite its L1 run targets (`verify: AccountTests/AccountManagerTests`). A screen and its screen test are one task; a module's snapshot images are one task. Only what spec, design and profile require; anything else goes to "Notes" as a possible change request. **Caps:** an Infrastructure feature has at most 12 tasks and 4 [HUMAN] tasks; a plan over 25 tasks means the spec is two features.
 
 **Paid services:** the level-1 connection test uses the cheapest call, states the expected cost, needs the user's OK.
 
@@ -40,7 +40,7 @@ Summary: tasks per level, [HUMAN] tasks, external costs, coverage. Ask whether t
 Status stays Architected. INDEX.md Docs: add `tasks`. Re-read to verify.
 
 ## Handoff
-[HUMAN] tasks in level 1 first ("Please do these first: …"); tick them in the main conversation after the human confirms, never in a sub-agent. Then: "Plan is ready. Next: `/backend PROJ-X`" if [BE] tasks exist, else "`/core PROJ-X`".
+[HUMAN] tasks in level 1 first ("Please do these first: …"); tick them in the main conversation after the human confirms, never in a sub-agent. Then: "Plan is ready. Next: `/backend PROJ-X`" if [BE] tasks exist, else "`/core PROJ-X`". Solo mode (PRD reviewer "owner (self-reviewed)"): the review and the handoff are one message.
 
 ## Git
 Commit `docs(PROJ-X): add task plan`.

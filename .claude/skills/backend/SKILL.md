@@ -17,6 +17,7 @@ Build the server side for feature $ARGUMENTS. Follow `.claude/skills/BUILDER.md`
 - API contracts are written down (fields, types, error codes) before `/core` builds against them; the mobile client never parses undocumented fields.
 - Only the personal data fields the spec lists. Retention and deletion paths (account deletion is a store requirement) exist for every personal field.
 - Paid external APIs: only the connection test the plan approved, cheapest call, report the real cost, never auto-retry.
+- Ladder for the server: L1 is one test file (`supabase test db supabase/tests/<file>.sql`, `firebase emulators:exec` with one spec, one `go test -run`), L2 the test directory, L3 the directory plus the migration applied to the development project once. `supabase start` once per run, `supabase db reset` only after a migration changed, never `stop`/`start` between tasks.
 - Subscriptions: the webhook handler and entitlement storage follow `docs/monetization.md` §2–4 and `rules/monetization.md` (verify secret, idempotent by event id, re-read the customer, one state model, revoke only when access ends, clients never write entitlements). Tests: every state transition, duplicate, wrong secret, client write refused, sandbox vs production.
 
 ## Tests

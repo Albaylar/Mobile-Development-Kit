@@ -21,8 +21,10 @@ See `docs/architecture-profile.md`.
 See `docs/privacy.md`.
 
 ## Tests
-| Suite | Command | Count |
-|---|---|---|
+Commands are `scripts/verify.sh` calls (`docs/verification-ladder.md`); the raw tool command appears only where the ladder cannot express it.
+
+| Suite | Command | Count | L1 time |
+|---|---|---|---|
 
 ## Platform
 Permissions, capabilities, deep links, background tasks, push: list with the feature that added them.

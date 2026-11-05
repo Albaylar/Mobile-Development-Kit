@@ -32,7 +32,7 @@ One question at a time, always with a recommendation. Cover:
 ## Write the spec
 - Branch: `git switch dev` (or `main` while `dev` does not exist), `git pull` only if a remote exists, then `git switch -c feat/PROJ-X-feature-name` (lower-case kebab, document language).
 - Folder `features/PROJ-X-feature-name/`, copy `template.md` (next to this file) to `spec.md`. Type: Feature, or Infrastructure for groundwork without UI. Write in the document language from the PRD.
-- Goal: one or two sentences. At least 3 user stories (US-n), at least 3 edge cases (EC-n).
+- Goal: one or two sentences. At least 3 user stories (US-n), at least 3 edge cases (EC-n). **Infrastructure features: at most 8 AC and 4 EC** (the interview is shorter: what the first product feature needs, nothing for later); everything else goes to "Out of scope" with the feature that will need it. A product feature over 15 AC is two features.
 - Every acceptance criterion has a fixed ID (AC-n) and the form "Given [state], when [action], then [result]". Testable, concrete values, no "fast" or "nice". Group by screen or area.
 - IDs are never renumbered or reused, also not after `/refine`: removed ones are struck through, new ones get the next free number.
 - "Out of scope": everything discussed but excluded, with a pointer to a later feature where one exists. "Design reference": the Figma frames or Claude Design artboards this feature reproduces, when the project has a design source.

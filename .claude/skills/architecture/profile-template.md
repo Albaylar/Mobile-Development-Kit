@@ -53,7 +53,8 @@ Domain layer (use cases): **no** / **yes, because** …
 | Network write survives app kill | yes / n/a (no network writes) |
 
 ## Quality gates
-- Build: `xcodebuild … build test` warnings as errors / `flutter analyze` + `dart format` / `./gradlew lint test`
+- Build and test: `scripts/verify.sh` (ladder L0 to L4, `docs/verification-ladder.md`), warnings as errors on every target; L1 under 2 minutes on the main target, L3 under 10 minutes
+- UI / integration test targets are outside the default test action and run in `/qa` (L4)
 - Tests required per AC: unit + screen test; golden/snapshot from profile B; integration/UI test for cross-screen criteria
 - Accessibility: Dynamic Type XXXL, VoiceOver/TalkBack labels, contrast 4.5:1
 - Localization: languages …, source of truth: ARB / String Catalog / strings.xml

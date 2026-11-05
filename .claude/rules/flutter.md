@@ -30,5 +30,6 @@ The vendored Flutter skills (platform "flutter" in `.claude/skills/SOURCES.md`) 
 
 ## Verification
 - `flutter analyze` with `very_good_analysis` (or `flutter_lints` + the kit's extra rules) and `dart format --set-exit-if-changed` pass before a task is done.
-- Tests (`flutter-testing`): unit for repositories and notifiers with fakes, widget tests per screen, golden tests (Alchemist) for profile B/C, `integration_test` (or Patrol for native dialogs) for every AC that crosses screens.
+- Commands through `scripts/verify.sh` (`docs/verification-ladder.md`): L0 `verify.sh compile lib/features/<name>` = `dart analyze` + `dart format` on the path; L1 `verify.sh only test/<file>_test.dart "<test name>"`; L2 `verify.sh suite test/features/<name>`; L3 `verify.sh full` (analyze + every test, goldens compared, never `--update-goldens` inside the loop); L4 `verify.sh ui` = `integration_test` on a device in `/qa`.
+- Tests (`flutter-testing`): unit for repositories and notifiers with fakes, widget tests per screen, golden tests (Alchemist) for profile B/C: per screen one light, one dark, one smallest-device-at-large-font image; `integration_test` (or Patrol for native dialogs) for every AC that crosses screens, run in L4 only.
 - Localization through `flutter_localizations` + `intl` ARB files from the first screen; `l10n.yaml` present.

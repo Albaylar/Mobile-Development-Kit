@@ -39,7 +39,7 @@ E. Platform work (permissions and usage strings, or the in-app explanation for n
 E2. Tests · F. External services · F2. Only a human can do this · G. Files · H. Deliberately simple · I. Decisions (recommendation each; after the decision: decision, reason, date) · J. Effort
 
 ## Review
-Present the design in a few sentences plus the open decisions. Name the reviewer from the PRD under "Reviewed by" ("owner (self-reviewed)" on a one-person project). Wait for approval.
+Present the design in a few sentences plus the open decisions. Name the reviewer from the PRD under "Reviewed by" ("owner (self-reviewed)" on a one-person project). Wait for approval: one question at the end, with every open decision carrying a recommendation, not one question per section. On the first design, profile, ADR-001 and the design are presented together and approved in that one step.
 
 ## Update tracking
 INDEX.md: status → Architected, Docs `spec, architecture` (plus `design` if `/design` ran). Re-read to verify.

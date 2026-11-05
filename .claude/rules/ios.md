@@ -31,7 +31,8 @@ The vendored iOS skills (platform "ios" in `.claude/skills/SOURCES.md`) own the 
 
 ## Verification
 - `swift-testing-pro`: new tests use Swift Testing; XCTest stays for UI and performance tests. Snapshot tests for every screen in profile C.
-- Build check: `xcodebuild -scheme <App> -destination 'platform=iOS Simulator,name=<newest iPhone of the installed Xcode>' -quiet build test` with `SWIFT_TREAT_WARNINGS_AS_ERRORS=YES` on the app target.
+- Commands through `scripts/verify.sh` (`docs/verification-ladder.md`), warnings as errors on every target: L0 `verify.sh compile [package]` = `build-for-testing` into the one `.build/DerivedData`; L1 `verify.sh only Target/Suite[/test]` = `test-without-building -only-testing:`; L2 `verify.sh suite [package]`; L3 `verify.sh full` (detached, UI targets skipped); L4 `verify.sh ui` and the Device Hub matrix in `/qa`. Never a scratch `-derivedDataPath`, never `clean`, never `xcodebuild … test` on the whole scheme after a single step.
+- The app scheme's test action lists only the unit and screen test targets; XCUITest targets have their own scheme or are skipped by name. Snapshot tests: per screen one light, one dark, one smallest-device-at-XXXL image; nothing that renders differently between runs (hosted regular-width captures, animated glass) is a snapshot.
 - `swiftui-pro` review before `/qa`: deprecated API, data flow, navigation, Dynamic Type, Reduce Motion, localization. `swiftui-performance-audit` when a screen has a list, animation or `body` that recomputes.
 - `ios-accessibility`: VoiceOver labels, Dynamic Type to XXXL, contrast. `ios-simulator` drives the simulator in `/qa` and `/perf`.
 

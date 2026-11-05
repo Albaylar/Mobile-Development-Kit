@@ -30,7 +30,7 @@ Every task names the AC and EC it fulfils.
 
 ## Coverage
 Every AC and EC from spec.md appears here with at least one task. An empty row is a planning error.
-"Test" and "Evidence" are filled by the builders: each test is red first (sabotage or missing code), then green.
+"Test" and "Evidence" are filled by the builders: each test is red first (run before the code exists), then green; both runs through `scripts/verify.sh only`.
 
 | ID | Short description | Tasks | Test | Evidence |
 |---|---|---|---|---|

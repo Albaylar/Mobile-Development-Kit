@@ -14,7 +14,7 @@ The kit does not fix an architecture. Each project chooses an **architecture pro
 → /backend → /core → /ui → /platform → (/perf) → /qa → /signoff PROJ-X acceptance → /release
 Any time: /help · /refine · /audit · /foundation setup|sync|status · /monetization
 ```
-Builders (`/backend /core /ui /platform`) run as forked sub-agents (`.claude/agents/`), share `.claude/skills/BUILDER.md`, never ask the user, stop and report. `/qa` and `/perf` run in the main conversation (simulator/emulator) with an audit agent in parallel; `/qa` decides, builders never. `/design` runs after spec sign-off when the project has a design source. `/signoff` and `/release` are user-only.
+Builders (`/backend /core /ui /platform`) run as forked sub-agents (`.claude/agents/`), share `.claude/skills/BUILDER.md`, never ask the user, stop and report. They verify on the **ladder** (`docs/verification-ladder.md`, `scripts/verify.sh`): compile per edit, the task's tests for red and green, the module suite per level, the full command once before reporting; UI tests, snapshot matrix and device poses belong to `/qa`. `/qa` and `/perf` run in the main conversation (simulator/emulator) with an audit agent in parallel; `/qa` decides, builders never. `/design` runs after spec sign-off when the project has a design source. `/signoff` and `/release` are user-only.
 
 ## Layout
 ```
@@ -22,9 +22,9 @@ Builders (`/backend /core /ui /platform`) run as forked sub-agents (`.claude/age
 .claude/skills/     kit skills (init foundation monetization write-spec refine signoff design architecture tasks backend core ui platform perf qa release help audit)
                     BUILDER.md (shared builder procedure) · 35 vendored third-party skills as flat folders next to them (Claude Code only discovers `.claude/skills/<name>/SKILL.md`), provenance and platform in SOURCES.md
 .claude/agents/     backend-dev core-dev ui-dev platform-dev qa-engineer perf-auditor
-docs/               USAGE.md (start here) · PRD.md · design/ (design-system.md, exports) · architecture-profile.md (per project) · adr/ · system.md · privacy.md · architecture-catalog.md · backend-selection.md · monetization.md · design-first.md · iphone-duo.md · foundation-mcp.md · architecture-research.md · skills-catalog.md
+docs/               USAGE.md (start here) · verification-ladder.md · preflight.md (per project) · PRD.md · design/ (design-system.md, exports) · architecture-profile.md (per project) · adr/ · system.md · privacy.md · architecture-catalog.md · backend-selection.md · monetization.md · design-first.md · iphone-duo.md · foundation-mcp.md · architecture-research.md · skills-catalog.md
 features/           INDEX.md · PROJ-X-name/{spec,architecture,tasks,perf-report,qa-report}.md
-scripts/            vendor-skills.sh
+scripts/            vendor-skills.sh · verify.sh (verification ladder, one warm command set per platform)
 ```
 
 ## Per-machine setup
@@ -35,7 +35,9 @@ scripts/            vendor-skills.sh
 - Disable globally installed generic skills that overlap the vendored packs (`swift-expert`, `flutter-expert`).
 
 ## Conventions
-Feature IDs `PROJ-X`; commits `type(PROJ-X): description`; AC/EC/T IDs never renumbered; status only in `features/INDEX.md`; test first, red proven by sabotage, 0 tests = failed; QA never fixes; build numbers change only in `/release`; document language per project (set in `/init`), rules and skills English.
+Feature IDs `PROJ-X`; commits `type(PROJ-X): description`, one per task; AC/EC/T IDs never renumbered; status only in `features/INDEX.md`; test first, red = the test run before the code, sabotage only in `/qa` and fix mode, 0 tests = failed; QA never fixes; build numbers change only in `/release`; document language per project (set in `/init`), rules and skills English; solo mode when the PRD reviewer is the owner; one session per checkout.
 
 ## Past mistakes
 _Add one line per mistake that must not repeat, with the rule that prevents it._
+- A builder ran the whole app scheme (unit, snapshot and XCUITest) after every red→green step: 65 of 102 minutes in one run, 229 minutes over the first project. Rule: the verification ladder in `BUILDER.md` and `scripts/verify.sh`; UI tests and the device matrix only in `/qa`.
+- Builders were resumed 13 times over two features and re-ran suites to find their place. Rule: commit per task with a progress line; a resume reads ticks and `git log`.

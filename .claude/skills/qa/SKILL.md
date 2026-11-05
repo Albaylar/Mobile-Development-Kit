@@ -16,7 +16,7 @@ Runs in the main conversation because the device checks need the iOS Simulator /
 1. Read `features/INDEX.md`, `docs/architecture-profile.md`, and in the feature folder `spec.md`, `architecture.md`, `tasks.md` (and `perf-report.md` if present).
 2. **Gate:** status In Progress (or In Review when resuming). Open tasks (not ticked, not struck through) → stop: "Open tasks: T-n … run the owning builder first; [HUMAN] tasks must be confirmed." Exception: repeat run after a fix loop.
 3. Status → In Review. `git log --oneline -10`, `git diff dev --stat` (or `main`).
-4. Build the app for simulator/emulator from the feature branch; a build that fails ends QA with a Critical bug.
+4. Build the app for simulator/emulator from the feature branch; a build that fails ends QA with a Critical bug. QA owns rung L4 of `docs/verification-ladder.md`: `scripts/verify.sh full` and `scripts/verify.sh ui` run here, detached (`verify.sh wait full`, `verify.sh wait ui`), never inside the Bash time limit and never in a sub-agent. Builder notes with `test loop too slow` and no harness fix → **Medium** ("harness").
 
 ## Coverage check
 Every AC and EC of the spec appears in the coverage table with a ticked task **and** a test marked `red → green`. Criteria that cannot be automated (store listing, a [HUMAN] setting, a physical sensor) may say `Evidence: manual (QA)`; test them by hand. Missing ID or missing test = **High** ("not implemented" / "not proven").
@@ -28,7 +28,7 @@ Every AC and EC of the spec appears in the coverage table with a ticked task **a
 
 ## Test
 Use the IDs everywhere.
-1. **Regression:** full build + test command of the profile (unit, screen, snapshot, integration). Any failure = High. Repeat run after a fix loop: retest in depth the previous bugs and `git diff <last QA commit>`; full suites still run.
+1. **Regression:** `verify.sh full` (unit, screen, snapshot) and `verify.sh ui` (UI / integration). Any failure = High; a printed test count of 0 = High. Repeat run after a fix loop: retest in depth the previous bugs and `git diff <last QA commit>`; both runs still run.
 2. **Every AC:** pass/fail on the primary simulator and on the smallest supported device (iPhone SE class / 5" Android, or the profile's lowest device).
 3. **Every EC** plus your own: airplane mode mid-request, app killed during a write, permission denied then granted in Settings, XXXL font, dark mode, rotation, double tap, background 10 min then foreground, low storage (simulator storage limit), second device with the same account.
 4. **Accessibility:** VoiceOver / TalkBack through the main flow, labels on every control, focus order, contrast 4.5:1, reduce motion.

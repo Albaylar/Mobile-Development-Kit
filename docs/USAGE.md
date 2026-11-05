@@ -39,7 +39,7 @@ Each arrow is a command. Each step refuses to run if the previous one is missing
 
 **5. Four kinds of work, four builders.** `[BE]` backend, `[CORE]` models/repositories/state, `[UI]` screens, `[PLAT]` permissions/push/manifests. Plus `[HUMAN]` for what only a person can do (accounts, certificates, dashboards, approvals).
 
-**6. Nothing is "done" without a test that failed first.** And QA, which did not write the code, decides whether it is done; builders never do.
+**6. Nothing is "done" without a test that failed first.** And QA, which did not write the code, decides whether it is done; builders never do. Tests run on a ladder (`docs/verification-ladder.md`): the task's own tests while building, the module's suite per level, everything once before the builder reports, device and UI tests in QA. A builder never runs the whole app's test suite after a single change.
 
 **7. Two gates belong to the client.** Spec sign-off (gate 1) and acceptance of a real build (gate 2). Only you run `/signoff`.
 
@@ -224,7 +224,7 @@ Run them in that order; each runs as a sub-agent and works only on its tag.
 ```
 /ui PROJ-5
 ```
-Each builder, per task: writes the test first, runs it, shows it **red for the right reason**, writes the code until green, ticks the task, fills the coverage table with `red → green`, commits per level. `/ui` pulls every control from the Foundation MCP and runs `check_usage` on each new screen. Builders never ask you questions: if something is unclear they stop and report; answer and run the same command again.
+Each builder, per task: writes the test first, runs only that test (`scripts/verify.sh only …`), shows it **red for the right reason**, writes the code until green, ticks the task, fills the coverage table with `red → green`, commits the task with a one-line progress note. Per level it runs the module's suite once; before reporting, the full command once (`verify.sh full`, detached). UI tests, snapshot matrices and device poses wait for `/qa`. `/ui` pulls every control from the Foundation MCP and runs `check_usage` on each new screen. Builders never ask you questions: if something is unclear they stop and report; answer and run the same command again.
 
 After the builders: **you** run the app in the simulator once and look. Builders cannot see the screen.
 
@@ -299,6 +299,11 @@ Status becomes **Released (in review)**. When the stores approve: verify the upg
 | Sandbox purchase unlocked production | environment not stored/checked | `/backend` fix with a failing test first |
 | Skills not in the `/` menu | wrong folder, or a skill inside a group folder | open Claude Code in the project root; skills must be `.claude/skills/<name>/SKILL.md` |
 | Context feels full mid-feature | long session | start a new session; skills re-read the files and continue from the ticked tasks |
+| A builder takes hours, "Waiting for the result" for an hour | the whole test suite runs after every step, or a scratch DerivedData rebuilds macro dependencies, or a run hits the 10-minute tool limit and is polled with `sleep` | `scripts/verify.sh status`; add the harness task (`docs/verification-ladder.md` §3); UI tests out of the default scheme |
+| The builder was restarted several times and starts over each time | no commit per task, no progress note | it is a kit rule since v0.2: commit per task, one line under "Implementation notes"; a resume reads ticks and `git log` |
+| Uncommitted code from a run you did not start | two sessions on one checkout | one session per checkout; parallel work goes to sub-agents |
+| Weeks of infrastructure, no product screen | PROJ-1 and PROJ-2 grew to 50 criteria | Infrastructure features: at most 8 AC and 4 EC; a product-visible screen by the third feature; move the rest to the features that need it |
+| Every step asks for approval although you are the only reviewer | PRD reviewer not set to "owner (self-reviewed)" | set it in the PRD; solo mode makes `/signoff` one step and skips `/design` for features without screens |
 
 ---
 
@@ -368,13 +373,15 @@ Where things are: product `docs/PRD.md` · profile `docs/architecture-profile.md
 
 **Before the first feature is built**
 - [ ] PRD read and correct, ten architecture inputs filled
+- [ ] `docs/preflight.md` done: accounts, team id, backend organization and plan, Docker, simulators, CLIs
 - [ ] `/foundation setup` done and Claude Code restarted (if Foundation)
 - [ ] `/monetization` done and dashboard [HUMAN] tasks finished (if selling)
 - [ ] PROJ-1 (backend) and PROJ-2 (app shell) are the first features
 - [ ] architecture profile and ADR-001 read and approved
 
 **Per feature, before `/qa`**
-- [ ] all tasks ticked, [HUMAN] tasks confirmed
+- [ ] all tasks ticked, [HUMAN] tasks confirmed, one commit per task
+- [ ] `scripts/verify.sh full` green with a test count above zero; no "test loop too slow" note without a harness fix
 - [ ] coverage table: every AC/EC has a test marked `red → green`
 - [ ] you ran the app once on the simulator
 - [ ] `/perf` green if a budget is touched

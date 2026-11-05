@@ -21,6 +21,7 @@ Setups decay quietly. Find it before it costs quality. Read everything first, ch
 8. **Leftovers.** `TODO`, `FIXME`, `TODO Text`; open questions older than the last sign-off; [HUMAN] tasks still open in features In Review or later; usage strings missing for a requested permission.
 9. **Tooling.** Build and test commands from the profile pass with more than 0 tests; localization has no missing keys; the official Flutter plugin installed where Flutter is in scope.
 10. **Skills freshness.** `.claude/skills/SOURCES.md` dates older than 6 months → propose `scripts/vendor-skills.sh`; vendored skills the profile never uses → propose removal.
+11. **Speed** (`docs/verification-ladder.md` §5). `scripts/verify.sh` present and `.verify.env` set; `verify.sh only` on the main target under two minutes (run it); builder notes contain no scratch `-derivedDataPath`, `clean`, `sleep` polling or `pkill`; every `test loop too slow` note has a harness fix; commits per task (a level with one commit for five tasks is Decay); ratio of `docs:` to code commits since the last audit above 1 → propose solo mode or merged commits; `[HUMAN]` account tasks only in `docs/preflight.md` or level 1 of the feature that needs them; one session per checkout (uncommitted code from an interrupted run in `git status` is a Gap).
 
 ## Report
 - **Result:** one sentence.
