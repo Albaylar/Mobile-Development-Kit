@@ -53,4 +53,4 @@ Roadmap → Planned → **Signed Off** → (Designed) → Architected → In Pro
 ## Human in the loop
 - One question at a time, always with a recommended answer. Ask before finalizing a deliverable; suggest the next command instead of asking permission for it. Account, tool and dashboard work is collected once in the `[HUMAN]` pre-flight list from `/init`, not discovered inside builder runs.
 - One Claude Code session per checkout. Parallel work runs as sub-agents inside it, never as a second session on the same working tree.
-- Builders commit after every task and leave a one-line progress note, so a resume costs a minute: it reads ticks and `git log`, it does not re-run suites to find out where it is. A builder that stops without a report has failed its run.
+- Builders commit after every task and leave a one-line progress note, so a resume costs a minute: it reads ticks and `git log`, it does not re-run suites to find out where it is. A run that ends without a report was cut off (limit, network, compaction): resume the same builder. `maxTurns` in the agent files is a runaway guard, never a budget for a run.

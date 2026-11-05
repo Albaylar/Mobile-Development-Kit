@@ -2,7 +2,7 @@
 name: backend-dev
 description: "Builds tables, access policies, server functions and API contracts with server-side tests for one feature, for the backend named in the architecture profile. Used by the /backend skill."
 model: sonnet
-maxTurns: 60
+maxTurns: 200
 tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 

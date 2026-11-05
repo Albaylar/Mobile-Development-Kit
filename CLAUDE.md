@@ -40,5 +40,6 @@ Feature IDs `PROJ-X`; commits `type(PROJ-X): description`, one per task; AC/EC/T
 ## Past mistakes
 _Add one line per mistake that must not repeat, with the rule that prevents it._
 - A builder ran the whole app scheme (unit, snapshot and XCUITest) after every red→green step: 65 of 102 minutes in one run, 229 minutes over the first project. Rule: the verification ladder in `BUILDER.md` and `scripts/verify.sh`; UI tests and the device matrix only in `/qa`.
-- Builders were resumed 13 times over two features and re-ran suites to find their place. Rule: commit per task with a progress line; a resume reads ticks and `git log`.
+- 7 of 13 builder runs were cut mid-tool, without a report, exactly at `maxTurns` (60, 50 for platform), which a feature of 29 tasks reaches after about six tasks. Rule: builders run at `maxTurns: 200`, a runaway guard and not a budget.
+- Each resume re-ran suites to find its place. Rule: commit per task with a progress line; a resume reads ticks and `git log`.
 - `/ui` never saw the Foundation MCP: an explicit `tools:` list in an agent file excludes every MCP tool. Rule: agent files that need a server name it (`mcp__foundation__*`); `/ui` stops when the tools are missing instead of skipping `check_usage`.

@@ -33,7 +33,7 @@ Where the minutes came from, in order of weight:
 3. **Fresh DerivedData per package.** Running `xcodebuild` from inside each local package, sometimes with a scratch `-derivedDataPath`, rebuilt `swift-syntax` (a macro dependency of the snapshot library) once per package: minutes each time.
 4. **The 10-minute tool limit.** A full run longer than 10 minutes was cut off, re-run in the background, polled with `sleep 10` loops, and killed with `pkill xcodebuild` before the next attempt. Killed builds leave partial products, which made the next run slower again.
 5. **Sabotage by the builder.** Builders proved "red" by breaking working code and running the full suite (13 runs), although the test written before the code is already the red proof. Sabotage is `/qa`'s tool.
-6. **Resumes.** Builders were restarted 13 times over two features (context compaction, a network cut, a stop without a report). Each resume re-read every document and re-ran a suite "to see where it is": 10 to 15 minutes per resume.
+6. **Runs cut at the turn limit, then resumed.** 7 of 13 finished builder runs ended mid-tool without a report, exactly at `maxTurns` (60/60, and 50/50 for `/platform`). A task takes about 10 turns, so a run stopped after about six tasks. Each resume re-read every document and re-ran a suite "to see where it is": 10 to 15 minutes per resume. Builders now run at `maxTurns: 200`, a runaway guard and not a budget.
 7. **Ceremony on a one-person project.** 29 of 43 commits were documentation; PROJ-1 spent 36 minutes and 12 commits on spec → sign-off → design (no screens) → architecture → refine → sign-off → design → refine → tasks before the first line of code.
 8. **Infrastructure before product.** Two setup features carried 49 acceptance criteria, 18 edge cases, 54 tasks and 12 `[HUMAN]` tasks; no product screen existed after 17 working hours.
 9. **Account work inside the loop.** Docker, the backend plan, the developer account and the team id were discovered as blockers inside builder runs instead of before PROJ-1.
@@ -98,7 +98,7 @@ Rules that keep the ladder fast:
 
 The ladder fixes the build loop. Four more rules fix the process around it.
 
-**Interruptible builders.** A builder commits after every task (not per level) and writes one line under "Implementation notes" (`T-n done, evidence, time`). A resume reads the ticks and `git log`, not the suites: orientation costs a minute, not fifteen. A builder that stops without a report has failed its run.
+**Interruptible builders.** A builder commits after every task (not per level) and writes one line under "Implementation notes" (`T-n done, evidence, time`). A resume reads the ticks and `git log`, not the suites: orientation costs a minute, not fifteen. A run that ends without a report was cut off; the main conversation resumes the same builder.
 
 **Solo mode.** The PRD names the reviewer. When it is "owner (self-reviewed)": `/signoff` records the sign-off in one step without an interview; `/design` is skipped for Infrastructure features and for any feature without a screen; `/architecture` and `/tasks` ask for approval once, at the end; documentation steps commit once each.
 

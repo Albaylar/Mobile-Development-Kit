@@ -2,7 +2,7 @@
 name: core-dev
 description: "Builds models, repositories, services, local store, sync and state holders with unit tests for one feature, inside the project's architecture profile. Used by the /core skill."
 model: sonnet
-maxTurns: 60
+maxTurns: 200
 tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 

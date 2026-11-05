@@ -2,7 +2,7 @@
 name: platform-dev
 description: "Does permissions, push, deep links, background tasks, widgets and manifest/entitlement/privacy-manifest changes for one feature, with their store-review impact. Used by the /platform skill."
 model: sonnet
-maxTurns: 50
+maxTurns: 200
 tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 

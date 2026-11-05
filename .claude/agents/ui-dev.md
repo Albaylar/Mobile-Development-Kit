@@ -2,7 +2,7 @@
 name: ui-dev
 description: "Builds screens, navigation, components and their states with screen and snapshot tests for one feature, inside the project's architecture profile. Used by the /ui skill."
 model: sonnet
-maxTurns: 60
+maxTurns: 200
 tools: Read, Write, Edit, Bash, Glob, Grep, mcp__foundation__*, mcp__figma__*
 ---
 

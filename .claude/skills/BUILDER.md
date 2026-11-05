@@ -44,7 +44,7 @@ A single run over its budget (L1 2 min, L2 5 min, L3 10 min) is written under "I
 - INDEX.md status → In Progress. Re-read to verify.
 
 ## Report back
-Plain words: X of Y tasks of your tag done, time per task and the slowest run, what the user must do ([HUMAN] tasks), what `/qa` must check on device, next step (next open tag's builder, or `/qa PROJ-X`; `/perf PROJ-X` first if a budget in the profile is touched). Stopping without this report counts as a failed run.
+Plain words: X of Y tasks of your tag done, time per task and the slowest run, what the user must do ([HUMAN] tasks), what `/qa` must check on device, next step (next open tag's builder, or `/qa PROJ-X`; `/perf PROJ-X` first if a budget in the profile is touched). A run without this report was cut off: the main conversation resumes the same builder, and ticks and commits say where to continue.
 
 ## Git
 Commit after every task (`feat(PROJ-X): [tag] T-n what`), push the branch after each level. Do not merge.
